@@ -2,16 +2,17 @@ import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  imports: [
-    RouterOutlet
-  ],
+  selector: 'app-playground',
   template: `
     <router-outlet/>
   `,
-  styleUrl: './app.scss'
+  imports: [
+    RouterOutlet
+  ],
+  styles: `
+  `
 })
-export class App {
 
+export class PlaygroundComponent {
 
 }
