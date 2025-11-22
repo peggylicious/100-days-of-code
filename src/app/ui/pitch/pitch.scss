@@ -26,6 +26,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border: var(--pitch-border);
+  pointer-events: none;
 }
 .small-center-circle{
   width: 10px;
@@ -37,6 +38,7 @@
   border: var(--pitch-border);
   background-color: #fff;
   border-radius: 100%;
+  pointer-events: none;
 }
 .divider{
   height: 100%;
@@ -46,4 +48,5 @@
   transform: translate(-50%, -50%);
   border: var(--pitch-border);
   background-color: #fff;
+  pointer-events: none;
 }
