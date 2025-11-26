@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Pitch} from '../../../ui/pitch/pitch';
+import {MatchingZone} from '../interfaces/pitch';
 
 @Component({
   selector: 'app-playground',
@@ -11,4 +12,7 @@ import {Pitch} from '../../../ui/pitch/pitch';
 })
 export class Playground {
 
+  updatePlayerEntry($event: MatchingZone) {
+    console.log('updatePlayerEntry', $event);
+  }
 }

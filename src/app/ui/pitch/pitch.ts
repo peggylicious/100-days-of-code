@@ -1,5 +1,7 @@
-import {Component, computed, signal} from '@angular/core';
-const INITIAL_PITCH_COnFIG = {
+import {Component, computed, output, signal} from '@angular/core';
+import {FIELD_ZONES} from '../../feature/data-capture/constants/field-zones';
+import {MatchingZone, Zone} from '../../feature/data-capture/interfaces/pitch';
+const INITIAL_PITCH_CONFIG = {
   pixelX: 0,
   pixelY: 0,
   pitchWidth: 0,
@@ -13,9 +15,10 @@ const INITIAL_PITCH_COnFIG = {
 })
 export class Pitch {
   private readonly SCALE = 100;
-  pitchConfig = signal(INITIAL_PITCH_COnFIG)
-  // pixelX = signal(0);
-  // pixelY = signal(0);
+  private zones: Zone[] = FIELD_ZONES;
+  private pitchConfig = signal(INITIAL_PITCH_CONFIG);
+
+  onSelectPitchConfig = output<MatchingZone>();
 
   /**
    * NB: IMPORTANT: !!!
@@ -37,6 +40,7 @@ export class Pitch {
   clampedX = computed(() =>  Math.max(0, Math.min(100, this.normalizedXByScale())))
   clampedY = computed(() => Math.max(0, Math.min(100, this.normalizedYByScale())))
 
+
   getOffset($event: MouseEvent) {
     const clientDimensions = ($event.target as HTMLElement);
     this.pitchConfig.set({
@@ -47,7 +51,23 @@ export class Pitch {
     })
     console.log(this.normalizedX(), ' --- ', this.normalizedY());
     console.log(this.clampedX(), ' --- ', this.clampedY());
+    this.onSelectPitchConfig.emit(this.getZoneConfig())
   }
 
+  getZoneConfig(){
+    const selectedZone: Zone[] = []
+    for(const zone of this.zones){
+      const inRangeX = this.clampedX() >= zone.coordinates.x1 && this.clampedX() <= zone.coordinates.x2
+      const inRangeY = this.clampedY() >= zone.coordinates.y1 && this.clampedY() <= zone.coordinates.y2
+      if (inRangeX && inRangeY) {
+        selectedZone.push(zone)
+      }
+    }
+    return {
+      zone_name: selectedZone,
+      x: this.clampedX(),
+      y: this.clampedY()
+    }
+  }
 
 }
