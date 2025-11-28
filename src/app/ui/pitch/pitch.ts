@@ -15,11 +15,24 @@ const INITIAL_PITCH_CONFIG = {
 })
 export class Pitch {
   private readonly SCALE = 100;
-  private zones: Zone[] = FIELD_ZONES;
+  zones: Zone[] = FIELD_ZONES;
   private pitchConfig = signal(INITIAL_PITCH_CONFIG);
 
   onSelectPitchConfig = output<MatchingZone>();
+actualPitchLengthM = 105;
+actualPitchWidthM = 68; /* use 68 instead of 58 for realistic ratio */
+// mobilePitchWidth: 200px; /* this represents the shorter side (width) */
+pitchRatio = 1.544; /* 105 ÷ 68 */
+// pitch-border: 2px solid #fff;
+// pitch-center-circle-radius: 9.15; // 1.59 * 2
+// pitch-center-circle-diameter: var(--pitch-center-circle-radius) * 2; // 1.59 * 2
 
+actualPenaltyWidthLg = 40.3;
+actualPenaltyLengthLg = 16.5;
+actualPenaltyWidthsm = 18.3;
+actualPenaltyLengthsm = 5.5;
+pitchCenterCircleRadius = 9.15; // 1.59 * 2
+pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
   /**
    * NB: IMPORTANT: !!!
    *
@@ -36,7 +49,7 @@ export class Pitch {
   normalizedX = computed(() => this.pitchConfig().pixelX / this.pitchConfig().pitchLength)
   normalizedY = computed(() => (this.pitchConfig().pixelY / this.pitchConfig().pitchWidth))
   normalizedXByScale = computed(() => this.normalizedX() * this.SCALE)
-  normalizedYByScale = computed(() =>  -((this.normalizedY() * this.SCALE)  - this.SCALE))
+  normalizedYByScale = computed(() =>  this.normalizedY() * this.SCALE)
   clampedX = computed(() =>  Math.max(0, Math.min(100, this.normalizedXByScale())))
   clampedY = computed(() => Math.max(0, Math.min(100, this.normalizedYByScale())))
 
@@ -54,20 +67,21 @@ export class Pitch {
     this.onSelectPitchConfig.emit(this.getZoneConfig())
   }
 
-  getZoneConfig(){
-    const selectedZone: Zone[] = []
-    for(const zone of this.zones){
+  getZoneConfig(): MatchingZone  {
+    const foundIndex =  this.zones.findIndex(zone => {
       const inRangeX = this.clampedX() >= zone.coordinates.x1 && this.clampedX() <= zone.coordinates.x2
       const inRangeY = this.clampedY() >= zone.coordinates.y1 && this.clampedY() <= zone.coordinates.y2
-      if (inRangeX && inRangeY) {
-        selectedZone.push(zone)
-      }
-    }
+      return inRangeX && inRangeY
+    })
+
     return {
-      zone_name: selectedZone,
+      zone: this.zones[foundIndex],
       x: this.clampedX(),
-      y: this.clampedY()
+      y: this.transformYOriginToBottom(this.clampedY())
     }
   }
 
+  transformYOriginToBottom(y: number): number{
+    return (this.SCALE - y)
+  }
 }

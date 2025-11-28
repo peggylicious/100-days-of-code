@@ -10,10 +10,10 @@ export interface Zone {
   name: string;
   coordinates: Coordinates;
   labels: { home: string; away: string };
-  group: string;
+  // group: string;
 }
 export interface MatchingZone {
-  zone_name: Zone[],
+  zone: Zone,
   x: number,
   y: number
 }

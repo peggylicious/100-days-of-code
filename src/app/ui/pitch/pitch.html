@@ -4,5 +4,21 @@
             <div class="small-center-circle"></div>
         </div>
         <div class="divider"></div>
+      @for (zone of zones; track zone.id) {
+        <div class="zone" [style.width.%]="zone.coordinates.x2 - zone.coordinates.x1" [style.height.%]="zone.coordinates.y2 - zone.coordinates.y1" [style.left.%]="zone.coordinates.x1" [style.top.%]="zone.coordinates.y1">
+          <p>{{ zone.name }}</p>
+        </div>
+      }
+      <div class="penalty-lg" [style.width]="((actualPenaltyLengthLg / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((actualPenaltyWidthLg / actualPitchWidthM) * 100) + '%'">
+        <div class="penalty-sm" [style.width]="((actualPenaltyLengthsm / actualPenaltyLengthLg) * 100) + '%'"
+             [style.height]="((actualPenaltyWidthsm / actualPenaltyWidthLg) * 100) + '%'"></div>
+
+        </div>
+      <div class="penalty-arc" [style.width]="((pitchCenterCircleDiameter / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((pitchCenterCircleDiameter / actualPitchWidthM) * 100) + '%'">
+
+<!--      [style.left]="(((pitchCenterCircleDiameter / actualPitchLengthM) * 100) - 11) + '%'">-->
+      </div>
     </div>
 </div>

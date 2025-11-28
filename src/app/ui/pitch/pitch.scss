@@ -50,3 +50,56 @@
   background-color: #fff;
   pointer-events: none;
 }
+.zone{
+  position: absolute;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+.zone p{
+  pointer-events: none;
+}
+.penalty-sm{
+  //width: calc((var(--actual-pitch-length-m) / var(--actual-penalty-length-sm)) * 100%);
+  //height: calc((var(--actual-pitch-width-m) / var(--actual-penalty-width-sm)) *100%);
+  background-color: transparent;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.penalty-lg{
+  background-color: transparent;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+.penalty-arc{
+  //width: calc(100% * (var(--pitch-center-circle-diameter)  / 105));
+  //height: calc(100% * (var(--pitch-center-circle-diameter) / 68));
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  //left: 0;
+  //transform: translateY(-50%);
+  border: var(--pitch-border);
+  pointer-events: none;
+  //z-index: -1;
+  //clip-path: inset(0% 0% 0% 70%);
+}
+//.zone p{
+//  top: 50%;
+//  left: 50%;
+//  transform: translate(-50%, -50%);
+//}
