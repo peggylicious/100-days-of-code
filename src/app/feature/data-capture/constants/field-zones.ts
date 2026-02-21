@@ -415,4 +415,18 @@ export const FIELD_ZONES = [
 //     coordinates: { x1: 66.67, y1: 0, x2: 100, y2: 20.44 },
 //     labels: { home: 'Left Wing Zone', away: 'Right Back Zone' }
 //   }
-// ]
+//
+
+export const  swapedCoords = FIELD_ZONES.map(zone => {
+  const {x1, x2, y1, y2} = zone.coordinates
+  return {
+    ...zone,
+    coordinates: {
+      x1: 100 - x2,
+      y1: y1,
+      x2: 100 - x1,
+      y2: y2
+    }
+  }
+})
+console.log(swapedCoords)
