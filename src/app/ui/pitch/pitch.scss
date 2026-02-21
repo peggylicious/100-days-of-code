@@ -16,6 +16,9 @@
   border: var(--pitch-border);
   position: relative;
 }
+.pitch-box *{
+  pointer-events: none;
+}
 
 .center-circle{
   width: calc(100% * (var(--pitch-center-circle-diameter)  / 105));
@@ -84,6 +87,12 @@
   border-bottom: 2px solid #fff;
   border-right: 2px solid #fff;
 }
+.penalty-lg.rotate{
+  right: 0;
+  padding-left: initial;
+  transform: translateY(-50%) rotateY(180deg);
+  transform-origin: center;
+}
 
 .penalty-arc{
   //width: calc(100% * (var(--pitch-center-circle-diameter)  / 105));
@@ -92,14 +101,42 @@
   position: absolute;
   top: 50%;
   //left: 0;
-  //transform: translateY(-50%);
+  transform: translateY(-50%);
   border: var(--pitch-border);
   pointer-events: none;
   //z-index: -1;
   //clip-path: inset(0% 0% 0% 70%);
+  clip-path: inset(0% 0% 0% 78%);
 }
 //.zone p{
 //  top: 50%;
 //  left: 50%;
 //  transform: translate(-50%, -50%);
 //}
+.penalty-spot{
+  transform: translateY(-50%);
+  top: 50%;
+  background: #fff;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  position: absolute
+}
+.corner-arc{
+  border-radius: 100%;
+  background: transparent;
+  position: absolute;
+  border: 1px solid #fff;
+}
+.top-left{
+  clip-path: inset(32% 0% 0% 40%);
+}
+.bottom-left{
+  clip-path: inset(0% 0% 30% 50%);
+}
+.top-right{
+  clip-path: inset(44% 38% 0% 0%);
+}
+.bottom-right{
+  clip-path: inset(0% 27% 28% 32%);
+}

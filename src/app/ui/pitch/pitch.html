@@ -14,11 +14,62 @@
         <div class="penalty-sm" [style.width]="((actualPenaltyLengthsm / actualPenaltyLengthLg) * 100) + '%'"
              [style.height]="((actualPenaltyWidthsm / actualPenaltyWidthLg) * 100) + '%'"></div>
 
+        <div class="penalty-arc" [style.width]="((pitchCenterCircleDiameter / actualPenaltyLengthLg) * 100) + '%'"
+             [style.height]="((pitchCenterCircleDiameter / actualPenaltyWidthLg) * 100) + '%'"
+             [style.left]="((1.85/actualPenaltyLengthLg)*100) + '%'">
+          <!--  Happy new year-->
+          <!--      [style.left]="(((pitchCenterCircleDiameter / actualPitchLengthM) * 100) - 11) + '%'">-->
         </div>
-      <div class="penalty-arc" [style.width]="((pitchCenterCircleDiameter / actualPitchLengthM) * 100) + '%'"
-           [style.height]="((pitchCenterCircleDiameter / actualPitchWidthM) * 100) + '%'">
-<!--  Happy new year-->
-<!--      [style.left]="(((pitchCenterCircleDiameter / actualPitchLengthM) * 100) - 11) + '%'">-->
+        <div class="penalty-spot"
+             [style.left]="((11/actualPenaltyLengthLg)*100)+'%'">
+        </div>
+        </div>
+
+      <div class="penalty-lg rotate" [style.width]="((actualPenaltyLengthLg / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((actualPenaltyWidthLg / actualPitchWidthM) * 100) + '%'">
+        <div class="penalty-sm" [style.width]="((actualPenaltyLengthsm / actualPenaltyLengthLg) * 100) + '%'"
+             [style.height]="((actualPenaltyWidthsm / actualPenaltyWidthLg) * 100) + '%'"></div>
+
+        <div class="penalty-arc" [style.width]="((pitchCenterCircleDiameter / actualPenaltyLengthLg) * 100) + '%'"
+             [style.height]="((pitchCenterCircleDiameter / actualPenaltyWidthLg) * 100) + '%'"
+             [style.left]="((1.85/actualPenaltyLengthLg)*100) + '%'">
+          <!--  Happy new year-->
+          <!--      [style.left]="(((pitchCenterCircleDiameter / actualPitchLengthM) * 100) - 11) + '%'">-->
+        </div>
+        <div class="penalty-spot"
+             [style.left]="((11/actualPenaltyLengthLg)*100)+'%'">
+        </div>
       </div>
+      <div class="corner-arc top-left"
+           [style.width]="((2 / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((2 / actualPitchWidthM) * 100) + '%'"
+           [style.top]="-((1 / actualPitchWidthM) * 100) + '%'"
+           [style.left]="-((1 / actualPitchLengthM) * 100) + '%'">
+
+      </div>
+      <div class="corner-arc top-right"
+           [style.width]="((2 / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((2 / actualPitchWidthM) * 100) + '%'"
+           [style.top]="-((1 / actualPitchWidthM) * 100) + '%'"
+           [style.right]="-((1 / actualPitchLengthM) * 100) + '%'">
+      </div>
+      <div class="corner-arc bottom-left"
+           [style.width]="((2 / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((2 / actualPitchWidthM) * 100) + '%'"
+           [style.bottom]="-((1 / actualPitchWidthM) * 100) + '%'"
+           [style.left]="-((1 / actualPitchLengthM) * 100) + '%'">
+      </div>
+      <div class="corner-arc bottom-right"
+           [style.width]="((2 / actualPitchLengthM) * 100) + '%'"
+           [style.height]="((2 / actualPitchWidthM) * 100) + '%'"
+           [style.bottom]="-((1 / actualPitchWidthM) * 100) + '%'"
+           [style.right]="-((1 / actualPitchLengthM) * 100) + '%'">
+      </div>
+
+<!--      <div class="penalty-arc" [style.width]="((pitchCenterCircleDiameter / actualPitchLengthM) * 100) + '%'"-->
+<!--           [style.height]="((pitchCenterCircleDiameter / actualPitchWidthM) * 100) + '%'">-->
+<!--&lt;!&ndash;  Happy new year&ndash;&gt;-->
+<!--&lt;!&ndash;      [style.left]="(((pitchCenterCircleDiameter / actualPitchLengthM) * 100) - 11) + '%'">&ndash;&gt;-->
+<!--      </div>-->
     </div>
 </div>

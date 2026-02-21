@@ -1,7 +1,8 @@
 //Term	   Side	  |   Measurement	  |   Description
 //Length	Longer  |   side	~105m	  |   Runs along the touchlines (goal to goal direction).
 //Width	  Shorter |   side	~68m	  |   Runs along the goal lines (side to side across the pitch).
-
+// 📌 The penalty arc starts 1.85 meters outside the penalty box line (because the penalty box line is 16.5m from the goal line).
+//Also: Penalty box line distance from goal line: 16.5m Arc distance beyond the penalty box: ( 11 + 9.15 ) − 16.5 = 3.65𝑚 (11+9.15)−16.5 = 3.65m
 
 :root {
   --actual-pitch-length-m: 105;

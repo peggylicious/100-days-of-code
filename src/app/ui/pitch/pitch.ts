@@ -1,5 +1,5 @@
 import {Component, computed, output, signal} from '@angular/core';
-import {FIELD_ZONES} from '../../feature/data-capture/constants/field-zones';
+import {FIELD_ZONES, swapedCoords} from '../../feature/data-capture/constants/field-zones';
 import {MatchingZone, Zone} from '../../feature/data-capture/interfaces/pitch';
 const INITIAL_PITCH_CONFIG = {
   pixelX: 0,
@@ -15,7 +15,7 @@ const INITIAL_PITCH_CONFIG = {
 })
 export class Pitch {
   private readonly SCALE = 100;
-  zones: Zone[] = FIELD_ZONES;
+  zones: Zone[] = swapedCoords;
   private pitchConfig = signal(INITIAL_PITCH_CONFIG);
 
   onSelectPitchConfig = output<MatchingZone>();
