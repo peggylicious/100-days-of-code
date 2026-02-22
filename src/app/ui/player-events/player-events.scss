@@ -1,0 +1,24 @@
+.events{
+  display: flex;
+  gap: .5rem;
+}
+button{
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .25rem;
+  padding: .75rem 1rem;
+  border-radius: .5rem;
+  border: 1px solid #1E293B;
+  background: #0F172A;
+  color: #fff;
+  font-size: .75rem;
+}
+button span{
+  //font-size: 1.2em !important;
+}
+button:hover{
+  border: 1px solid #334155;
+  background: #1E293B;
+  color: #fff;
+}

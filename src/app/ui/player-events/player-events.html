@@ -1,0 +1,11 @@
+@for (category of playerEvents().categories; track category.name) {
+  <h3>{{ category.name }}</h3>
+  <div class="events">
+    @for (event of category.items; track event.id) {
+      <button>
+        <span class="material-symbols-outlined">{{ event.icon }}</span>
+        <span>{{ event.name }}</span>
+      </button>
+    }
+  </div>
+}
