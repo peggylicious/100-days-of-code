@@ -1,0 +1,34 @@
+.playground{
+  display: flex;
+}
+.lhs{
+  background: #0F172A;
+  width: 300px;
+  height: 100dvh;
+  padding: 1rem;
+}
+.top{
+  display: flex;
+  background: #020617;
+  //border: 1px solid #334155;
+  border-radius: 8px;
+  position: relative;
+}
+.top svg{
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+.top input{
+  background: transparent;
+  color: #757b88;
+  padding: .5rem 1.75rem;
+  width: 100%;
+  height: 100%;
+  border-radius: .5rem;
+  border: 1px solid #334155;
+}
+.top input::placeholder{
+  color: #6B7280;
+}
