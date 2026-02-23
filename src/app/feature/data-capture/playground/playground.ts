@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, computed, signal} from '@angular/core';
 import {Pitch} from '../../../ui/pitch/pitch';
 import {MatchingZone} from '../interfaces/pitch';
 import {PlayerEvents} from '../../../ui/player-events/player-events';
@@ -21,6 +21,24 @@ import {MatchConfig, Team, TeamSide} from '../interfaces/team';
 export class Playground {
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
   public MATCHDAY_CONFIG = signal(matchDayConfig)
+  public query = signal('')
+
+  filteredPlayersList = computed(()=> {
+    const searchTerm = this.query().toLowerCase();
+    const state = this.MATCHDAY_CONFIG();
+    if(!searchTerm)  return state
+    return {
+      ...state,
+      home: {
+        ...state.home,
+        players: state.home.players.filter(player => player.name.toLowerCase().includes(searchTerm.toLowerCase())),
+      },
+      away: {
+        ...state.away,
+        players: state.away.players.filter(player => player.name.toLowerCase().includes(searchTerm.toLowerCase())),
+      }
+    }
+  })
 
   updatePlayerEntry($event: MatchingZone) {
     console.log('updatePlayerEntry', $event);
