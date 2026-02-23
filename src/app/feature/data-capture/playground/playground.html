@@ -6,10 +6,24 @@
       </svg>
       <input type="text" placeholder="Find Player">
     </div>
+    <div class="player-list">
+      <div class="home">
+        <h5 class="team-name">{{ MATCHDAY_CONFIG().home.name }} (Home)</h5>
+        @for (player of MATCHDAY_CONFIG().home.players; track player.id) {
+          <app-player-card [player]="player" (click)="selectPlayer(player, 'home')"/>
+        }
+      </div>
+      <div class="away">
+        <h5 class="team-name">{{ MATCHDAY_CONFIG().away.name }} (Away)</h5>
+        @for (player of MATCHDAY_CONFIG().away.players; track player.id) {
+          <app-player-card [player]="player" (click)="selectPlayer(player, 'away')"/>
+        }
+      </div>
+    </div>
   </div>
   <div class="rhs">
     <app-pitch (onSelectPitchConfig)="updatePlayerEntry($event)"/>
-    <app-player-events [playerEvents]="PLAYER_EVENTS"/>
+    <app-player-events [playerEvents]="PLAYER_EVENTS()"/>
     <p>Football Pitch</p>
   </div>
 

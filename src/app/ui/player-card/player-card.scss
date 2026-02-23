@@ -1,0 +1,48 @@
+.player{
+  display: flex;
+  //justify-content: space-between;
+  align-items: center;
+  gap: .75rem;
+  padding: 14.5px .75rem;
+}
+.active{
+  border-radius: .75rem;
+  background: #22C55E;
+}
+.active * {
+  color: #020617;
+}
+
+.jersey_no{
+  color: #94A3B8;
+  background: #1E293B;
+  border-radius: .5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.active .jersey_no{
+  background: rgba(2, 6, 23, 0.2);
+  color: #020617;
+  font-weight: bold;
+}
+.group-details{
+ text-align: left;
+}
+.name{
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+.position-status{
+  color: #64748B;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: capitalize;
+  opacity: 0.7;
+}
+svg{
+  margin-left: auto;
+}
