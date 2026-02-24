@@ -33,7 +33,7 @@ export interface FootballCategory<T extends FootballItem>{
 }
 
 export interface EventOutcome {
-  id: string;
+  id: OutcomeId;
   label: string;
   color: string;
   icon: string;

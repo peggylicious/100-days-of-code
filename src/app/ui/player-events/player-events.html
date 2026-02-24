@@ -1,11 +1,24 @@
 @for (category of playerEvents().categories; track category.name) {
-  <h3>{{ category.name }}</h3>
+  <h3 class="cat-name" [class]="category.name.toLowerCase()"> <span></span>{{ category.name }}</h3>
   <div class="events">
-    @for (event of category.items; track event.id) {
-      <button>
-        <span class="material-symbols-outlined">{{ event.icon }}</span>
-        <span>{{ event.name }}</span>
-      </button>
+    @for (item of category.items; track item.id) {
+      <div class="btn-wrapper">
+        @if (item.id === selectedItem()?.id) {
+          <div class="outcomes-wrapper">
+            @for (outcome of item.allowedOutcomes; track outcome) {
+              <button (click)="selectOutcome(outcome)">
+                <span class="material-symbols-outlined">{{ selectedOutcomeIcon()[$index] }}</span>
+                <span>{{ outcome }}</span>
+              </button>
+            }
+          </div>
+
+        }
+        <button (click)="showOutcomes(item)">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span>{{ item.name }}</span>
+        </button>
+      </div>
     }
   </div>
 }

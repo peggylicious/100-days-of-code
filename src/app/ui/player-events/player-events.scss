@@ -22,3 +22,49 @@ button:hover{
   background: #1E293B;
   color: #fff;
 }
+.btn-wrapper{
+  position: relative;
+}
+.outcomes-wrapper{
+  position: absolute;
+  top: 50px;
+}
+.attacking{
+  color: #22C55E;
+}
+.defending{
+  color: #60A5FA;
+}
+.transitions{
+  color: #FB923C;
+}
+.attacking span{
+  background: #22C55E;
+}
+.defending span{
+  background: #60A5FA;
+}
+.transitions span{
+  background: #FB923C;
+}
+h3 span{
+  background: #fff;
+}
+h3{
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+.cat-name{
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.cat-name span{
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
