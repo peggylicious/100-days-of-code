@@ -23,6 +23,7 @@ export class Playground {
   public MATCHDAY_CONFIG = signal(matchDayConfig)
   public query = signal('')
 
+  public matchLogEntry = signal<MatchEventLogEntry[]>([])
   filteredPlayersList = computed(()=> {
     const searchTerm = this.query().toLowerCase();
     const state = this.MATCHDAY_CONFIG();
