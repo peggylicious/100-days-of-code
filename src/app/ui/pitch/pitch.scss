@@ -142,3 +142,12 @@
 .bottom-right{
   clip-path: inset(0% 27% 28% 32%);
 }
+.pointer{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: red;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}

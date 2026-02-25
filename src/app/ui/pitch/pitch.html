@@ -1,5 +1,6 @@
 <div class="pitch-wrapper">
     <div class="pitch-box" (click)="getOffset($event)">
+      <div class="pointer" [style.top]="selectedCoordinate().y + 'px'" [style.left]="selectedCoordinate().x + 'px'"></div>
         <div class="center-circle">
             <div class="small-center-circle"></div>
         </div>

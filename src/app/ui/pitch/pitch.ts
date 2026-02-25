@@ -52,7 +52,7 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
   normalizedYByScale = computed(() =>  this.normalizedY() * this.SCALE)
   clampedX = computed(() =>  Math.max(0, Math.min(100, this.normalizedXByScale())))
   clampedY = computed(() => Math.max(0, Math.min(100, this.normalizedYByScale())))
-
+  selectedCoordinate = signal<{x: number, y: number}>({x: 0, y: 0})
 
   getOffset($event: MouseEvent) {
     const clientDimensions = ($event.target as HTMLElement);
@@ -65,6 +65,7 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
     console.log(this.normalizedX(), ' --- ', this.normalizedY());
     console.log(this.clampedX(), ' --- ', this.clampedY());
     this.onSelectPitchConfig.emit(this.getZoneConfig())
+    this.selectedCoordinate.update(state => ({...state, x: this.pitchConfig().pixelX, y: this.pitchConfig().pixelY}))
   }
 
   getZoneConfig(): MatchingZone  {
