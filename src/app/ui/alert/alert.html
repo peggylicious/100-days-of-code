@@ -1,0 +1,8 @@
+@if (!close()) {
+  @let cssClass = prop().cssClass;
+  @let message = prop().message;
+  <div class="alert" [class]="cssClass" [style.top]="(componentLength() + 10 )+ 'px'" [style.right]="(componentLength() + 10 )+ 'px'">
+    <span class="closebtn" (click)="closeManually()">&times;</span>
+    <strong>{{cssClass}}!</strong> {{ message }}
+  </div>
+}

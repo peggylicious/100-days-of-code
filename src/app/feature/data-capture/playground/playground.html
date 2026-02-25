@@ -29,7 +29,7 @@
   </div>
   <div class="rhs">
     <div class="rhs-top">
-      <app-pitch (onSelectPitchConfig)="updatePlayerEntry($event)"/>
+      <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)"/>
     </div>
     <div class="header">
       <h2>Capture Events</h2>
@@ -44,4 +44,9 @@
     </div>
   </div>
 
+</div>
+<div class="alerts-wrapper">
+  @for (alert of alerts(); track alert.id) {
+    <app-alert [prop]="alert.alert" (closed)="removeAlert(alert.id)"/>
+  }
 </div>
