@@ -9,5 +9,6 @@ import {Player} from '../../feature/data-capture/interfaces/player';
 })
 export class PlayerCard {
   player = input.required<Player>();
+  active = input.required<boolean>();
 
 }

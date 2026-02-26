@@ -1,6 +1,7 @@
 .events{
   display: flex;
   gap: .5rem;
+  margin-bottom: 12px;
 }
 button{
   display: inline-flex;
@@ -55,7 +56,7 @@ h3{
   font-size: 12px;
   font-weight: bold;
   margin-bottom: 12px;
-  margin-top: 12px;
+  //margin-top: 12px;
 }
 .cat-name{
   display: flex;

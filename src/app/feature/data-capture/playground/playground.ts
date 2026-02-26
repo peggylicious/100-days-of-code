@@ -1,16 +1,15 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {Pitch} from '../../../ui/pitch/pitch';
-import {MatchingZone} from '../interfaces/pitch';
+import { PitchConfig} from '../interfaces/pitch';
 import {PlayerEvents} from '../../../ui/player-events/player-events';
 import {footballEventsGoogleSet} from '../constants/player-events';
 import {PlayerCard} from '../../../ui/player-card/player-card';
 import {matchDayConfig} from '../constants/match';
 import {MatchEventLogEntry, Player} from '../interfaces/player';
-import {MatchConfig, Team, TeamSide} from '../interfaces/team';
+import {Team, TeamSide} from '../interfaces/team';
 import {DataTable} from '../../../ui/data-table/data-table';
 import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
-import {AlertProp} from '../interfaces/shared';
 import {Snackbar} from '../../../services/snackbar';
 interface DraftTerm {
   isPlayerSelected: boolean;
@@ -58,19 +57,21 @@ export class Playground {
       }
     }
   })
-
-  selectPitchPosition(zone: MatchingZone) {
+  public isShowTable = signal<boolean>(false)
+  highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
+  selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
         ...state,
         coordinates: {
           ...state.coordinates,
-          x: zone.x,
-          y: zone.y
-        }
+          x: zone.zoneConfig.x,
+          y: zone.zoneConfig.y
+        },
+        offset: zone.offsetConfig
       }
     })
-    if(zone.x){
+    if(zone.zoneConfig.x){
       this.updateDraft({isCoordinateSelected: true})
     }
   }
@@ -146,5 +147,16 @@ export class Playground {
 
   removeAlert(id: string){
     this.snackbarService.removeAlert(id)
+  }
+
+  showTable() {
+    this.isShowTable.set(!this.isShowTable());
+  }
+  showSelectedCoordinate(event: MatchEventLogEntry | null){
+    if(event){
+      this.highlightedCoordinate.set(event.offset)
+    }else{
+      this.highlightedCoordinate.set(undefined)
+    }
   }
 }

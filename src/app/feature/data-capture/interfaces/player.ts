@@ -28,4 +28,8 @@ export interface MatchEventLogEntry {
     x: number;
     y: number;
   };
+  offset: {
+    x: number;
+    y: number;
+  }
 }

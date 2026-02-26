@@ -17,3 +17,7 @@ export interface MatchingZone {
   x: number,
   y: number
 }
+export interface PitchConfig {
+  zoneConfig: MatchingZone,
+  offsetConfig: {x: number, y: number}
+}

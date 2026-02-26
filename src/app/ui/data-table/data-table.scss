@@ -1,3 +1,17 @@
+:host{
+  //height: 500px;
+  //background: #0F172A;
+  //border-radius: 8px;
+  //height: 100%;
+}
+.event-log-container{
+  //height: 260px;
+  background: #0F172A;
+  border-radius: 8px;
+}
+table{
+  //height: 500px;
+}
 .match-event-table {
   width: 100%;
   border-collapse: collapse;
@@ -5,7 +19,7 @@
   background: #0F172A;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  //box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 caption {
@@ -17,7 +31,7 @@ caption {
   background: #0F172A;
 }
 thead tr{
-  background-color: #020617;
+  //background-color: #020617;
   color: #64748B;
   width: 100%;
 }
@@ -28,11 +42,12 @@ tbody{
 
 }
 th {
-  background-color: #020617;
+  //background-color: #020617;
   color: #64748B;
   text-transform: uppercase;
   font-size: 0.75rem;
-  padding: 12px;
+  //padding: 12px;
+  padding: 0 12px 8px 12px;;
   text-align: left;
   border-bottom: .5px solid #1E293B;
 }
@@ -42,6 +57,7 @@ td {
   //border-bottom: 1px solid #edf2f7;
   border-bottom: .5px solid #1E293B;
   color: #374151;
+  font-size: 0.75rem;
 }
 
 .view-details-row {

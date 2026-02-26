@@ -10,7 +10,7 @@
       <div class="home">
         <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
         @for (player of filteredPlayersList().home.players; track player.id) {
-          <app-player-card [player]="player" (click)="selectPlayer(player, 'home')"/>
+          <app-player-card [player]="player" [active]="player.id === selectedPlayerData().playerId" (click)="selectPlayer(player, 'home')"/>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No home player found</small>
@@ -19,7 +19,7 @@
       <div class="away">
         <h5 class="team-name">{{ filteredPlayersList().away.name }} (Away)</h5>
         @for (player of filteredPlayersList().away.players; track player.id) {
-          <app-player-card [player]="player" (click)="selectPlayer(player, 'away')"/>
+          <app-player-card [player]="player" [active]="player.id === selectedPlayerData().playerId" (click)="selectPlayer(player, 'away')"/>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No away player found</small>
@@ -29,17 +29,37 @@
   </div>
   <div class="rhs">
     <div class="rhs-top">
-      <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)"/>
+      <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="highlightedCoordinate()"/>
     </div>
-    <div class="header">
-      <h2>Capture Events</h2>
-    </div>
+<!--    <div class="header">-->
+<!--      <h2>Capture Events <button (click)="showTable()">Show Table</button></h2>-->
+<!--    </div>-->
     <div class="rhs-bottom">
-      <div class="events-wrapper">
-        <app-player-events [playerEvents]="PLAYER_EVENTS()" (onSelectedPlayerEvent)="updatePlayerEvent($event)"/>
+      <div class="header">
+        <div class="tabs">
+          <button (click)="showTable()" [class.active]="!isShowTable()">Events</button>
+          <button (click)="showTable()" [class.active]="isShowTable()">Events Log</button>
+        </div>
       </div>
-      <div class="table-wrapper">
-        <app-data-table [playerTableEntry]="matchLogEntry()"/>
+      <div class="body">
+        @if (!isShowTable()) {
+          <div class="events-wrapper">
+            <app-player-events [playerEvents]="PLAYER_EVENTS()" (onSelectedPlayerEvent)="updatePlayerEvent($event)"/>
+          </div>
+        }
+        @if (isShowTable()) {
+<!--          <div class="table-wrapper" [style.transform]="isShowTable() ? 'translateY(' + -260 + 'px)' : 'translateY(0)'">-->
+          <div class="table-wrapper">
+            <app-data-table [playerTableEntry]="matchLogEntry()" (showSelectedCoordinate)="showSelectedCoordinate($event)"/>
+          </div>
+        }
+      </div>
+      <div class="footer">
+        <div class="trigger">
+          <p>Quick Trigger Enabled</p>
+          <p><span class="shortcut">Space</span> Commentary</p>
+        </div>
+        <span class="eventsQty">{{ matchLogEntry().length}} Events Captured</span>
       </div>
     </div>
   </div>

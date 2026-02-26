@@ -1,15 +1,18 @@
 <div class="pitch-wrapper">
     <div class="pitch-box" (click)="getOffset($event)">
       <div class="pointer" [style.top]="selectedCoordinate().y + 'px'" [style.left]="selectedCoordinate().x + 'px'"></div>
+      @if (highlightedCoordinate()) {
+        <div class="pointer highlight" [style.top]="highlightedCoordinate()?.y + 'px'" [style.left]="highlightedCoordinate()?.x + 'px'"></div>
+      }
         <div class="center-circle">
             <div class="small-center-circle"></div>
         </div>
         <div class="divider"></div>
-      @for (zone of zones; track zone.id) {
-        <div class="zone" [style.width.%]="zone.coordinates.x2 - zone.coordinates.x1" [style.height.%]="zone.coordinates.y2 - zone.coordinates.y1" [style.left.%]="zone.coordinates.x1" [style.top.%]="zone.coordinates.y1">
-          <p>{{ zone.name }}</p>
-        </div>
-      }
+<!--      @for (zone of zones; track zone.id) {-->
+<!--        <div class="zone" [style.width.%]="zone.coordinates.x2 - zone.coordinates.x1" [style.height.%]="zone.coordinates.y2 - zone.coordinates.y1" [style.left.%]="zone.coordinates.x1" [style.top.%]="zone.coordinates.y1">-->
+<!--          <p>{{ zone.name }}</p>-->
+<!--        </div>-->
+<!--      }-->
       <div class="penalty-lg" [style.width]="((actualPenaltyLengthLg / actualPitchLengthM) * 100) + '%'"
            [style.height]="((actualPenaltyWidthLg / actualPitchWidthM) * 100) + '%'">
         <div class="penalty-sm" [style.width]="((actualPenaltyLengthsm / actualPenaltyLengthLg) * 100) + '%'"

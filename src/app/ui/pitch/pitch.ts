@@ -1,6 +1,6 @@
-import {Component, computed, output, signal} from '@angular/core';
+import {Component, computed, input, Input, output, signal} from '@angular/core';
 import {FIELD_ZONES, swapedCoords} from '../../feature/data-capture/constants/field-zones';
-import {MatchingZone, Zone} from '../../feature/data-capture/interfaces/pitch';
+import {MatchingZone, PitchConfig, Zone} from '../../feature/data-capture/interfaces/pitch';
 const INITIAL_PITCH_CONFIG = {
   pixelX: 0,
   pixelY: 0,
@@ -18,7 +18,7 @@ export class Pitch {
   zones: Zone[] = swapedCoords;
   private pitchConfig = signal(INITIAL_PITCH_CONFIG);
 
-  onSelectPitchConfig = output<MatchingZone>();
+  onSelectPitchConfig = output<PitchConfig>();
 actualPitchLengthM = 105;
 actualPitchWidthM = 68; /* use 68 instead of 58 for realistic ratio */
 // mobilePitchWidth: 200px; /* this represents the shorter side (width) */
@@ -53,6 +53,7 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
   clampedX = computed(() =>  Math.max(0, Math.min(100, this.normalizedXByScale())))
   clampedY = computed(() => Math.max(0, Math.min(100, this.normalizedYByScale())))
   selectedCoordinate = signal<{x: number, y: number}>({x: 0, y: 0})
+  highlightedCoordinate = input<{ x: number; y: number }>();
 
   getOffset($event: MouseEvent) {
     const clientDimensions = ($event.target as HTMLElement);
@@ -64,7 +65,7 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
     })
     console.log(this.normalizedX(), ' --- ', this.normalizedY());
     console.log(this.clampedX(), ' --- ', this.clampedY());
-    this.onSelectPitchConfig.emit(this.getZoneConfig())
+    this.onSelectPitchConfig.emit({zoneConfig: this.getZoneConfig(), offsetConfig: {x: $event.offsetX, y: $event.offsetY}});
     this.selectedCoordinate.update(state => ({...state, x: this.pitchConfig().pixelX, y: this.pitchConfig().pixelY}))
   }
 

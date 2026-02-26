@@ -1,4 +1,4 @@
-<div class="player" [class]="player().status">
+<div class="player" [class]="active() ? player().status : ''">
   <div class="jersey_no">
     {{ player().jersey_no }}
   </div>

@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {MatchEventLogEntry} from '../../feature/data-capture/interfaces/player';
 
 @Component({
@@ -9,4 +9,5 @@ import {MatchEventLogEntry} from '../../feature/data-capture/interfaces/player';
 })
 export class DataTable {
   playerTableEntry = input.required<MatchEventLogEntry[]>()
+  showSelectedCoordinate = output<MatchEventLogEntry | null>();
 }
