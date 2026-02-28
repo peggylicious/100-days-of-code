@@ -10,4 +10,5 @@ import {MatchEventLogEntry} from '../../feature/data-capture/interfaces/player';
 export class DataTable {
   playerTableEntry = input.required<MatchEventLogEntry[]>()
   showSelectedCoordinate = output<MatchEventLogEntry | null>();
+  showSelectedCoordinateAndSeek = output<number>();
 }

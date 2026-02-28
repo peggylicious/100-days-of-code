@@ -48,7 +48,12 @@
   </div>
   <div class="rhs">
     <div class="rhs-top">
-      <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="highlightedCoordinate()"/>
+            <div class="player-container">
+      <app-youtube-player [userSelectedTime]="seekTime()" (timeSelected)="logSelectedTime($event)" (playerStopped)="stopPlay($event)"/>
+            </div>
+      <div class="pitch-container">
+        <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="selectedTableItem()?.offset"/>
+      </div>
     </div>
 <!--    <div class="header">-->
 <!--      <h2>Capture Events <button (click)="showTable()">Show Table</button></h2>-->
@@ -69,7 +74,7 @@
         @if (isShowTable()) {
 <!--          <div class="table-wrapper" [style.transform]="isShowTable() ? 'translateY(' + -260 + 'px)' : 'translateY(0)'">-->
           <div class="table-wrapper">
-            <app-data-table [playerTableEntry]="matchLogEntry()" (showSelectedCoordinate)="showSelectedCoordinate($event)"/>
+            <app-data-table [playerTableEntry]="matchLogEntry()" (showSelectedCoordinate)="showSelectedCoordinate($event)" (showSelectedCoordinateAndSeek)="seek($event)"/>
           </div>
         }
       </div>

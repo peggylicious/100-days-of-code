@@ -16,7 +16,7 @@ export type PlayerStatus = 'active' | 'ready'
 
 export interface MatchEventLogEntry {
   // id: string;              // Unique ID for the log entry
-  matchTime: string;            // Formatted match time (e.g., "12'")
+  matchTime: number;            // Formatted match time (e.g., "12'")
   timestamp: Date;         // Actual system time for sorting
   playerId: string;        // Reference to the Player
   playerName: string;      // Cached name (for easier table rendering)

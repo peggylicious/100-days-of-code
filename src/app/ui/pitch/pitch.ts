@@ -75,11 +75,13 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
       const inRangeY = this.clampedY() >= zone.coordinates.y1 && this.clampedY() <= zone.coordinates.y2
       return inRangeX && inRangeY
     })
+    const roundedX = Math.round(this.clampedX() * 100) / 100
+    const roundedY = Math.round(this.transformYOriginToBottom(this.clampedY()) * 100) / 100
 
     return {
       zone: this.zones[foundIndex],
-      x: this.clampedX(),
-      y: this.transformYOriginToBottom(this.clampedY())
+      x: roundedX,
+      y: roundedY
     }
   }
 

@@ -1,0 +1,22 @@
+.video-wrapper{
+  width: 100%;            /* Or whatever width you want */
+  max-width: 800px;       /* Keeps it from getting too huge */
+  aspect-ratio: 16 / 9;   /* This is the magic line */
+  background: #000;       /* Optional: keep background black while loading */
+  margin: 0 auto;         /* Centers the video */
+  box-shadow: 0px 4px 6px -4px #0000001A, 0px 10px 15px -3px #0000001A;
+  border-radius: 15px;
+  padding: 6px;
+  border: 2px solid #1E293B;
+}
+
+#youtube-player{
+
+}
+
+::ng-deep iframe {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border-radius: 15px;
+}

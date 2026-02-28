@@ -11,6 +11,8 @@ import {DataTable} from '../../../ui/data-table/data-table';
 import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
 import {Snackbar} from '../../../services/snackbar';
+import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
+import {YoutubePlayerState} from '../interfaces/shared';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -23,7 +25,8 @@ interface DraftTerm {
     PlayerEvents,
     PlayerCard,
     DataTable,
-    Alert
+    Alert,
+    YoutubePlayer
   ],
   templateUrl: './playground.html',
   styleUrl: './playground.scss'
@@ -59,6 +62,10 @@ export class Playground {
   })
   public isShowTable = signal<boolean>(false)
   highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
+  selectedTableItem = signal<MatchEventLogEntry | null>(null)
+  latestPlayTime = signal<{yt: number, system: Date} | null>(null)
+  isPlayerPaused = signal<boolean>(false)
+  seekTime = signal<number>(0)
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
@@ -110,6 +117,9 @@ export class Playground {
   }
 
   updatePlayerEvent(data: { item: FootballItem; outcome: EventOutcome }) {
+    if (this.isPlayerPaused()){
+      return;
+    }
     if(!this.checkDraftSelection()){
       return
     }
@@ -117,6 +127,7 @@ export class Playground {
       const {item, outcome} = data;
       return {
         ...state,
+        matchTime: this.getPlayerTimeAtAction(),
         outcome: outcome,
         eventTypeId: item.id,
         eventTypeName: item.name,
@@ -153,10 +164,25 @@ export class Playground {
     this.isShowTable.set(!this.isShowTable());
   }
   showSelectedCoordinate(event: MatchEventLogEntry | null){
-    if(event){
-      this.highlightedCoordinate.set(event.offset)
-    }else{
-      this.highlightedCoordinate.set(undefined)
-    }
+    this.selectedTableItem.set(event)
+  }
+  seek(time: number){
+      this.seekTime.set(time)
+  }
+
+  logSelectedTime($event: {yt: number, system: Date}) {
+    console.log($event)
+    const {yt, system} = $event
+    this.latestPlayTime.set({yt, system})
+  }
+
+  getPlayerTimeAtAction(){
+    const msElapsed = Date.now() - (this.latestPlayTime()?.system.getTime() ?? 0);
+    const secondsElapsed = msElapsed / 1000;
+    return  Math.floor((this.latestPlayTime()?.yt ?? 0) + secondsElapsed);
+  }
+
+  stopPlay(event: boolean) {
+    this.isPlayerPaused.set(event)
   }
 }
