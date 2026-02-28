@@ -94,7 +94,7 @@
   left: 10px;
   transform: translateY(-50%);
 }
-.lhs-top input{
+.lhs-top input, .search-bar input{
   background: transparent;
   color: #757b88;
   padding: .5rem 1.75rem;
@@ -225,4 +225,21 @@ small{
   font-weight: bold;
   font-size: 10px;
   text-transform: uppercase;
+}
+.search-bar{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.search-bar input{
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.search-bar button{
+  background: #1E293B;
+  color: #fff;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid #1E293B;
+  font-size: 12px;
+  padding: 4px .5rem;
 }

@@ -1,4 +1,4 @@
-import {Component, effect, ElementRef, input, linkedSignal, output, signal, viewChild} from '@angular/core';
+import {Component, computed, effect, ElementRef, input, linkedSignal, output, signal, viewChild} from '@angular/core';
 import {YoutubePlayerState} from '../../feature/data-capture/interfaces/shared';
 
 @Component({
@@ -13,9 +13,16 @@ export class YoutubePlayer {
   private player: any;
 
   public userSelectedTime = input<number | null>(0)
+  public videoId = input<string>('')
   public timeSelected = output<{yt: number, system: Date}>();
   public playerStopped = output<boolean>();
-
+  private videoIdComp = linkedSignal({
+    source: this.videoId,
+    computation: () => {
+      return this.getVideoId(this.videoId()) ?? 'M7lc1UVf-VE'
+    }
+  })
+  // private videoIdComp = computed(() => this.videoId() ?? 'M7lc1UVf-VE')
   constructor() {
     effect(() => {
       const time = this.userSelectedTime();
@@ -23,6 +30,12 @@ export class YoutubePlayer {
         this.seekToTime(time);
       }
     });
+
+    effect(() => {
+      if(this.videoId()){
+        this.player.cueVideoById(this.videoIdComp());
+      }
+    })
   }
 
   ngAfterViewInit() {
@@ -35,7 +48,7 @@ export class YoutubePlayer {
 
   private initPlayer() {
     this.player = new (window as any)['YT'].Player(this.youtubePlayer()?.nativeElement, {
-      videoId: 'M7lc1UVf-VE',
+      videoId: this.videoIdComp(),
       height: '100%',
       width: '100%',
       events: {
@@ -76,5 +89,11 @@ export class YoutubePlayer {
       // Update your local signal so the UI stays in sync
       // this.lastTime.set(seconds);
     }
+  }
+
+  getVideoId(url: string): string | null {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
   }
 }

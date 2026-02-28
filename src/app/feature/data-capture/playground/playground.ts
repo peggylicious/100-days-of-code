@@ -66,6 +66,7 @@ export class Playground {
   latestPlayTime = signal<{yt: number, system: Date} | null>(null)
   isPlayerPaused = signal<boolean>(false)
   seekTime = signal<number>(0)
+  public videoUrl = signal('')
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
@@ -184,5 +185,9 @@ export class Playground {
 
   stopPlay(event: boolean) {
     this.isPlayerPaused.set(event)
+  }
+
+  public setVideoUrl(val: HTMLInputElement) {
+    this.videoUrl.set(val.value)
   }
 }

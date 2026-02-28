@@ -11,7 +11,10 @@
     </div>
   </div>
   <div class="league-details">
-
+    <div class="search-bar">
+      <input #vid type="text" placeholder="Paste youtube link">
+      <button (click)="setVideoUrl(vid)">Change Game</button>
+    </div>
   </div>
   <div class="user">
     <button>Export CSV</button>
@@ -49,7 +52,7 @@
   <div class="rhs">
     <div class="rhs-top">
             <div class="player-container">
-      <app-youtube-player [userSelectedTime]="seekTime()" (timeSelected)="logSelectedTime($event)" (playerStopped)="stopPlay($event)"/>
+      <app-youtube-player [userSelectedTime]="seekTime()" [videoId]="videoUrl()" (timeSelected)="logSelectedTime($event)" (playerStopped)="stopPlay($event)"/>
             </div>
       <div class="pitch-container">
         <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="selectedTableItem()?.offset"/>
