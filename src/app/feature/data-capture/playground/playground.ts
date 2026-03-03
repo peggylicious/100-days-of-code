@@ -1,4 +1,4 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, signal} from '@angular/core';
 import {Pitch} from '../../../ui/pitch/pitch';
 import { PitchConfig} from '../interfaces/pitch';
 import {PlayerEvents} from '../../../ui/player-events/player-events';
@@ -6,13 +6,12 @@ import {footballEventsGoogleSet} from '../constants/player-events';
 import {PlayerCard} from '../../../ui/player-card/player-card';
 import {matchDayConfig} from '../constants/match';
 import {MatchEventLogEntry, Player} from '../interfaces/player';
-import {Team, TeamSide} from '../interfaces/team';
+import {MatchConfig, Team, TeamSide} from '../interfaces/team';
 import {DataTable} from '../../../ui/data-table/data-table';
 import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
 import {Snackbar} from '../../../services/snackbar';
 import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
-import {YoutubePlayerState} from '../interfaces/shared';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -34,7 +33,13 @@ interface DraftTerm {
 export class Playground {
   private snackbarService = inject(Snackbar)
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
-  public MATCHDAY_CONFIG = signal(matchDayConfig)
+  private CONFIG_TAG = 'MATCHDAY_CONFIG'
+  private MATCHDAY_CONFIG = linkedSignal(() => {
+    const storageData = localStorage.getItem(this.CONFIG_TAG);
+    const savedEvents = JSON.parse(storageData ?? '{}') as MatchConfig
+    const isEmpty = Object.keys(savedEvents).length === 0;
+    return isEmpty ? matchDayConfig : JSON.parse(storageData ?? '{}') as MatchConfig ?? matchDayConfig
+  })
   public alerts = this.snackbarService.alerts
   public query = signal('')
   public selectedPlayerData = signal<Partial<MatchEventLogEntry>>({})
@@ -47,7 +52,10 @@ export class Playground {
   filteredPlayersList = computed(()=> {
     const searchTerm = this.query().toLowerCase();
     const state = this.MATCHDAY_CONFIG();
-    if(!searchTerm)  return state
+    if(!searchTerm)  {
+      localStorage.setItem(this.CONFIG_TAG, JSON.stringify(state));
+      return state
+    }
     return {
       ...state,
       home: {
@@ -172,7 +180,6 @@ export class Playground {
   }
 
   logSelectedTime($event: {yt: number, system: Date}) {
-    console.log($event)
     const {yt, system} = $event
     this.latestPlayTime.set({yt, system})
   }
@@ -189,5 +196,26 @@ export class Playground {
 
   public setVideoUrl(val: HTMLInputElement) {
     this.videoUrl.set(val.value)
+  }
+
+  updatePlayer($event: Player, id: string, side: TeamSide) {
+    this.MATCHDAY_CONFIG.update(state => {
+      return {
+        ...state,
+        [side]: {
+          ...state[side],
+          players: state[side].players.map(player => {
+            if(player.id === $event.id){
+              return {
+                ...player,
+                ...$event
+              };
+            }
+            return player
+          })
+
+        }
+      }
+    })
   }
 }

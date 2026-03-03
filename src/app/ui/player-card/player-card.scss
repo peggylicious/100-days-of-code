@@ -1,6 +1,5 @@
 .player{
   display: flex;
-  //justify-content: space-between;
   align-items: center;
   gap: .75rem;
   padding: 14.5px .75rem;
@@ -13,7 +12,7 @@
   color: #020617;
 }
 
-.jersey_no{
+.jersey_no, .jersey_no input{
   color: #94A3B8;
   background: #1E293B;
   border-radius: .5rem;
@@ -22,8 +21,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
+  position: relative;
+  text-align: center;
 }
-.active .jersey_no{
+.active .jersey_no, .active .jersey_no input{
   background: rgba(2, 6, 23, 0.2);
   color: #020617;
   font-weight: bold;
@@ -31,11 +33,21 @@
 .group-details{
  text-align: left;
 }
+.group-details input{
+  max-width: 80px;
+}
+.name-wrapper{
+  position: relative;
+
+}
 .name{
   color: #fff;
   font-size: 14px;
   font-weight: bold;
+  width: 100%;
+  height: 100%;
 }
+
 .position-status{
   color: #64748B;
   font-size: 10px;
@@ -45,4 +57,24 @@
 }
 svg{
   margin-left: auto;
+}
+.jersey_no input, .jersey_no .shield{
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+}
+
+.name-input{
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+.name-input.active-name-input{
+  position: relative;
+  z-index: 1;
 }

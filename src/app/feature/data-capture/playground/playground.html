@@ -32,7 +32,7 @@
       <div class="home">
         <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
         @for (player of filteredPlayersList().home.players; track player.id) {
-          <app-player-card [player]="player" [active]="player.id === selectedPlayerData().playerId" (click)="selectPlayer(player, 'home')"/>
+          <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No home player found</small>
@@ -41,7 +41,7 @@
       <div class="away">
         <h5 class="team-name">{{ filteredPlayersList().away.name }} (Away)</h5>
         @for (player of filteredPlayersList().away.players; track player.id) {
-          <app-player-card [player]="player" [active]="player.id === selectedPlayerData().playerId" (click)="selectPlayer(player, 'away')"/>
+          <app-player-card [player]="player" [active]="player.status === 'active'" (click)="selectPlayer(player, 'away')"/>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No away player found</small>

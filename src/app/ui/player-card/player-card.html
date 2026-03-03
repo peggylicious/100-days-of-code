@@ -1,9 +1,17 @@
-<div class="player" [class]="active() ? player().status : ''">
+<div class="player" [class]="active() ? player().status : ''" (mouseleave)="updatePlayer($event)">
   <div class="jersey_no">
-    {{ player().jersey_no }}
+    <input #jersey_no type="text" [value]="player().jersey_no">
+    @if (!isEditing()) {
+      <div class="shield" (click)="editJersey($event, 'jersey')"></div>
+    }
   </div>
   <div class="group-details">
-    <p class="name">{{ player().name }}</p>
+    <div class="name-wrapper">
+      <input #player_name type="text" class="name-input" [class.active-name-input]="isEditing()" [value]="player().name">
+      @if (!isEditing()) {
+        <p class="shield name" (click)="editJersey($event, 'name')">{{ player().name }}</p>
+      }
+    </div>
     <p class="position-status"><span>{{ player().position.key }}</span> <b> . </b><span>{{ player().status }}</span></p>
   </div>
   @if (player().status === 'active') {
