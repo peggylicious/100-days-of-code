@@ -1,3 +1,17 @@
+:host{
+  height: inherit;
+  display: block;
+}
+.events-container{
+  height: inherit;
+  //overflow-y: scroll;
+  //padding: 1rem;
+}
+.events-container-wrapper{
+  overflow-y: scroll;
+  padding: 1rem;
+  height: 100%;
+}
 .events{
   display: flex;
   gap: .5rem;
@@ -29,6 +43,22 @@ button:hover{
 .outcomes-wrapper{
   position: absolute;
   top: 50px;
+  left: 100%;
+  z-index: 50;
+  background: #020617;
+  padding: 1rem;
+  border-radius: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.outcomes-wrapper button{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: .25rem;
+  align-items: center;
+  width: 100%;
 }
 .attacking{
   color: #22C55E;

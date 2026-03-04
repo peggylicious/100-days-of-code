@@ -3,11 +3,14 @@
   //background: #0F172A;
   //border-radius: 8px;
   //height: 100%;
+  height: inherit;
 }
 .event-log-container{
   //height: 260px;
   background: #0F172A;
   border-radius: 8px;
+  height: inherit;
+  overflow-y: scroll;
 }
 table{
   //height: 500px;

@@ -42,7 +42,7 @@ export class Playground {
   })
   public alerts = this.snackbarService.alerts
   public query = signal('')
-  public selectedPlayerData = signal<Partial<MatchEventLogEntry>>({})
+  private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer())
   public matchLogEntry = signal<MatchEventLogEntry[]>([])
   private draft = signal<DraftTerm>({
     isPlayerSelected: false,
@@ -72,9 +72,10 @@ export class Playground {
   highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
   selectedTableItem = signal<MatchEventLogEntry | null>(null)
   latestPlayTime = signal<{yt: number, system: Date} | null>(null)
-  isPlayerPaused = signal<boolean>(false)
+  isPlayerPaused = signal<boolean>(true)
   seekTime = signal<number>(0)
   public videoUrl = signal('')
+
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
@@ -126,7 +127,9 @@ export class Playground {
   }
 
   updatePlayerEvent(data: { item: FootballItem; outcome: EventOutcome }) {
+    // if (this.isPlayerPaused() || (!this.isPlayerPaused && !this.latestPlayTime()?.yt)){
     if (this.isPlayerPaused()){
+      this.snackbarService.updateAlert({message: "You will need to start match before logging player events!", cssClass: "warning", duration: 7000})
       return;
     }
     if(!this.checkDraftSelection()){
@@ -147,7 +150,8 @@ export class Playground {
     this.matchLogEntry.update(state => {
       return[...state, this.selectedPlayerData()  as MatchEventLogEntry];
     })
-    this.selectedPlayerData.set({})
+    this.draft.update(state => ({...state, isEventSelected: false, isCoordinateSelected: false}))
+    this.selectedPlayerData.update(state => ({...{}, playerId: state.playerId, playerName: state.playerName}))
   }
 
   private updateDraft(term: Partial<DraftTerm>) {
@@ -155,11 +159,11 @@ export class Playground {
   }
   private checkDraftSelection(){
     if(!this.draft().isCoordinateSelected){
-      this.snackbarService.updateAlert({message: "No coordinate selected", cssClass: "warning", duration: 7000})
+      this.snackbarService.updateAlert({message: "No coordinate selected", cssClass: "warning", duration: 2000})
       return false
     }
-    if(!this.draft().isPlayerSelected){
-      this.snackbarService.updateAlert({message: "No player selected", cssClass: "info", duration: 7000})
+    if(!this.draft().isPlayerSelected && !this.selectedPlayerData().playerId){
+      this.snackbarService.updateAlert({message: "No player selected", cssClass: "info", duration: 2000})
       return false
     }
     return true;
@@ -180,6 +184,7 @@ export class Playground {
   }
 
   logSelectedTime($event: {yt: number, system: Date}) {
+    console.log("log ", $event)
     const {yt, system} = $event
     this.latestPlayTime.set({yt, system})
   }
@@ -187,10 +192,12 @@ export class Playground {
   getPlayerTimeAtAction(){
     const msElapsed = Date.now() - (this.latestPlayTime()?.system.getTime() ?? 0);
     const secondsElapsed = msElapsed / 1000;
+    console.log(this.latestPlayTime())
     return  Math.floor((this.latestPlayTime()?.yt ?? 0) + secondsElapsed);
   }
 
   stopPlay(event: boolean) {
+    console.log(event)
     this.isPlayerPaused.set(event)
   }
 
@@ -217,5 +224,18 @@ export class Playground {
         }
       }
     })
+  }
+
+  getSavedSelectedPlayer(){
+    const storageData = localStorage.getItem(this.CONFIG_TAG);
+    const savedConfig = JSON.parse(storageData ?? '{}') as MatchConfig
+    const player = [...savedConfig.home.players, ...savedConfig.away.players].find(player => player.status === 'active')
+    if(player){
+      return {
+        playerId: player.id,
+        playerName: player.name
+      }
+    }
+    return {}
   }
 }

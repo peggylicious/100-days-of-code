@@ -52,7 +52,9 @@
   <div class="rhs">
     <div class="rhs-top">
             <div class="player-container">
-      <app-youtube-player [userSelectedTime]="seekTime()" [videoId]="videoUrl()" (timeSelected)="logSelectedTime($event)" (playerStopped)="stopPlay($event)"/>
+<!--              @defer {-->
+                <app-youtube-player [userSelectedTime]="seekTime()" [videoId]="videoUrl()" (timeSelected)="logSelectedTime($event)" (playerStopped)="stopPlay($event)"/>
+<!--              }-->
             </div>
       <div class="pitch-container">
         <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="selectedTableItem()?.offset"/>

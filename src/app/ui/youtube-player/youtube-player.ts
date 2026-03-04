@@ -52,7 +52,10 @@ export class YoutubePlayer {
       height: '100%',
       width: '100%',
       events: {
-        'onStateChange': (event: any) => this.onPlayerStateChange(event)
+        'onStateChange': (event: any) => this.onPlayerStateChange(event),
+        'onReady': (event: any) => {
+          // this.playerStopped.emit(true)
+        },
       }
     });
   }
@@ -65,7 +68,9 @@ export class YoutubePlayer {
         this.emitCurrentTime();
       }
     }
+    console.log("Not player stopped for player", event.data)
     if (event.data !== (window as any)['YT'].PlayerState.PLAYING) {
+      console.log("player stopped for player", event.data)
       this.playerStopped.emit(true)
     }
     this.lastState.set(event.data);

@@ -1,24 +1,27 @@
-@for (category of playerEvents().categories; track category.name) {
-  <h3 class="cat-name" [class]="category.name.toLowerCase()"> <span></span>{{ category.name }}</h3>
-  <div class="events">
-    @for (item of category.items; track item.id) {
-      <div class="btn-wrapper">
-        @if (item.id === selectedItem()?.id) {
-          <div class="outcomes-wrapper">
-            @for (outcome of item.allowedOutcomes; track outcome) {
-              <button (click)="selectOutcome(outcome)">
-                <span class="material-symbols-outlined">{{ selectedOutcomeIcon()[$index] }}</span>
-                <span>{{ outcome }}</span>
-              </button>
+<div #event_container class="events-container">
+  <div class="events-container-wrapper">
+    @for (category of playerEvents().categories; track category.name) {
+      <h3 class="cat-name" [class]="category.name.toLowerCase()"> <span></span>{{ category.name }}</h3>
+      <div class="events">
+        @for (item of category.items; track item.id) {
+          <div class="btn-wrapper">
+            @if (item.id === selectedItem()?.id) {
+              <div #outcome_wrapper class="outcomes-wrapper" [style.top]="isOutside() ? outcomeVerticalPosition() : '50px'">
+                @for (outcome of item.allowedOutcomes; track outcome) {
+                  <button (click)="selectOutcome(outcome)">
+                    <span class="material-symbols-outlined">{{ selectedOutcomeIcon()[$index] }}</span>
+                    <span>{{ outcome }}</span>
+                  </button>
+                }
+              </div>
             }
+            <button (click)="showOutcomes(item)">
+              <span class="material-symbols-outlined">{{ item.icon }}</span>
+              <span>{{ item.name }}</span>
+            </button>
           </div>
-
         }
-        <button (click)="showOutcomes(item)">
-          <span class="material-symbols-outlined">{{ item.icon }}</span>
-          <span>{{ item.name }}</span>
-        </button>
       </div>
     }
   </div>
-}
+</div>
