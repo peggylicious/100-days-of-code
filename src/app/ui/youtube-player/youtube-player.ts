@@ -19,7 +19,7 @@ export class YoutubePlayer {
   private videoIdComp = linkedSignal({
     source: this.videoId,
     computation: () => {
-      return this.getVideoId(this.videoId()) ?? 'M7lc1UVf-VE'
+      return this.getVideoId(this.videoId()) ?? 'hzR3qPMTQzQ'
     }
   })
   // private videoIdComp = computed(() => this.videoId() ?? 'M7lc1UVf-VE')
