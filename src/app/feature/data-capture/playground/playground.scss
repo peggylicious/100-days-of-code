@@ -11,16 +11,17 @@
 .lhs{
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  //gap: 1rem;
   background: #0F172A;
   width: 300px;
   height: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 1.25rem 1rem;
 }
 .rhs{
   height: 100%;
   //overflow-y: scroll;
-  width: 100vw;
+  //width: 100vw;
+  flex: 1;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -90,6 +91,7 @@
   //border: 1px solid #334155;
   border-radius: 8px;
   position: relative;
+  margin-bottom: 1rem;
 }
 .lhs-top svg{
   position: absolute;
@@ -114,6 +116,7 @@
   flex-direction: column;
   gap: .5rem;
   padding-bottom: 1.5rem;
+  padding-right: 20px;
 }
 .team-name{
   color: #64748B;
@@ -128,7 +131,7 @@ small{
   font-size: 11px;
   padding: 1rem 0;
 }
-.header, .footer{
+.header, .footer, .lhs-bottom{
   //margin-top: 30px;
   padding: .594rem 0;
   background: #020617;
@@ -136,7 +139,7 @@ small{
 .header .tabs{
   padding: 0 1rem;
 }
-.footer{
+.footer, .lhs-bottom{
   //position: absolute;
   bottom: 0;
   left: 0;
@@ -258,4 +261,45 @@ small{
   gap: .5rem;
   align-items: center;
   font-size: 14px;
+}
+
+.side-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.side-details button, .lhs-bottom button{
+  border: none;
+  background: none;
+  background: transparent;
+  color: #22C55E;
+  cursor: pointer;
+}
+.side-details span, .lhs-bottom span{
+  font-size: 13px;
+}
+.lhs-bottom{
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.player-list::-webkit-scrollbar-thumb,
+.player-list::-webkit-scrollbar-track
+{
+  background: transparent;
+}
+.player-list::-webkit-scrollbar {
+  width: 10px;
+}
+.player-list:hover::-webkit-scrollbar{
+  width: 5px;
+  border-radius: 10px;
+}
+.player-list:hover::-webkit-scrollbar-track{
+  //background: red !important;
+  border-radius: 10px;
+}
+.player-list:hover::-webkit-scrollbar-thumb{
+  //background: red !important;
+  border-radius: 10px;
+  background: #1e293b;
 }

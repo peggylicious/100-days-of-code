@@ -35,7 +35,10 @@
     </div>
     <div class="player-list">
       <div class="home">
-        <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
+        <div class="side-details">
+          <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
+          <button type="button"><span class="material-symbols-outlined">person_add</span></button>
+        </div>
         @for (player of filteredPlayersList().home.players; track player.id) {
           <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
         }
@@ -52,6 +55,9 @@
           <small class="team-name">No away player found</small>
         }
       </div>
+    </div>
+    <div class="lhs-bottom">
+      <button type="button"><span class="material-symbols-outlined">delete</span></button>
     </div>
   </div>
   <div class="rhs">
