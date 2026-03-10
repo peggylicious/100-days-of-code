@@ -1,9 +1,14 @@
+:host{
+  width: 100%;
+  display: block;
+}
 .player{
   display: flex;
   align-items: center;
   gap: .75rem;
   padding: 14.5px .75rem;
   cursor: pointer;
+  width: 100%;
 }
 .active{
   border-radius: .75rem;

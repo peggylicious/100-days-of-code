@@ -74,6 +74,8 @@ export class Playground {
   latestPlayTime = signal<{yt: number, system: Date} | null>(null)
   isPlayerPaused = signal<boolean>(true)
   seekTime = signal<number>(0)
+  removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
+  showSelectBoxes = signal<boolean>(false)
   public videoUrl = signal('')
 
   selectPitchPosition(zone: PitchConfig) {
@@ -229,7 +231,14 @@ export class Playground {
   getSavedSelectedPlayer(){
     const storageData = localStorage.getItem(this.CONFIG_TAG);
     const savedConfig = JSON.parse(storageData ?? '{}') as MatchConfig
-    const player = [...savedConfig.home.players, ...savedConfig.away.players].find(player => player.status === 'active')
+    const grpdPlayers: Player[] = []
+    if(savedConfig.home && savedConfig.home.players){
+      grpdPlayers.push(...savedConfig.home.players)
+    }
+    if(savedConfig.away && savedConfig.away.players){
+      grpdPlayers.push(...savedConfig.away.players)
+    }
+    const player = grpdPlayers.find(player => player.status === 'active')
     if(player){
       return {
         playerId: player.id,
@@ -237,5 +246,31 @@ export class Playground {
       }
     }
     return {}
+  }
+
+  selectForDeletion(id: string, side: TeamSide) {
+    if (side === 'home'){
+      this.removePlayerList.update(state => ({...state, home: [...state.home, id]}))
+    }
+    if (side === 'away'){
+      this.removePlayerList.update(state => ({...state, away: [...state.away, id]}))
+    }
+  }
+
+  removePlayers() {
+    this.MATCHDAY_CONFIG.update(state => {
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          players: state.home.players.filter(player => !this.removePlayerList().home.includes(player.id))
+        },
+        away: {
+          ...state.away,
+          players: state.away.players.filter(player => !this.removePlayerList().away.includes(player.id))
+        }
+      }
+    })
+    this.showSelectBoxes.set(false)
   }
 }

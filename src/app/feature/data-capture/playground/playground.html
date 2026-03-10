@@ -37,10 +37,15 @@
       <div class="home">
         <div class="side-details">
           <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
-          <button type="button"><span class="material-symbols-outlined">person_add</span></button>
+          <button type="button"><span class="material-symbols-outlined person">person_add</span></button>
         </div>
         @for (player of filteredPlayersList().home.players; track player.id) {
-          <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
+          <div class="player-list-wrapper">
+            @if (showSelectBoxes()) {
+              <input type="checkbox" (change)="selectForDeletion(player.id, 'home')">
+            }
+            <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
+          </div>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No home player found</small>
@@ -49,7 +54,12 @@
       <div class="away">
         <h5 class="team-name">{{ filteredPlayersList().away.name }} (Away)</h5>
         @for (player of filteredPlayersList().away.players; track player.id) {
-          <app-player-card [player]="player" [active]="player.status === 'active'" (click)="selectPlayer(player, 'away')"/>
+          <div class="player-list-wrapper">
+            @if (showSelectBoxes()) {
+              <input type="checkbox" (change)="selectForDeletion(player.id, 'away')">
+            }
+            <app-player-card [player]="player" [active]="player.status === 'active'" (click)="selectPlayer(player, 'away')"/>
+          </div>
         }
         @if (filteredPlayersList().home.players.length === 0){
           <small class="team-name">No away player found</small>
@@ -57,7 +67,12 @@
       </div>
     </div>
     <div class="lhs-bottom">
-      <button type="button"><span class="material-symbols-outlined">delete</span></button>
+      @if (!showSelectBoxes()) {
+        <button type="button" (click)="showSelectBoxes.set(true)"><span class="material-symbols-outlined check">check_box</span></button>
+      } @else {
+        <button type="button" (click)="showSelectBoxes.set(false)"><span class="material-symbols-outlined check">cancel_presentation</span></button>
+        <button type="button" (click)="removePlayers()"><span class="material-symbols-outlined delete">delete</span></button>
+      }
     </div>
   </div>
   <div class="rhs">

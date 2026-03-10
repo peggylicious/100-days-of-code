@@ -275,12 +275,18 @@ small{
   color: #22C55E;
   cursor: pointer;
 }
-.side-details span, .lhs-bottom span{
+.side-details span, .lhs-bottom .person{
   font-size: 13px;
+}
+.lhs-bottom .check, .lhs-bottom .delete{
+  font-size: 16px;
 }
 .lhs-bottom{
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .player-list::-webkit-scrollbar-thumb,
 .player-list::-webkit-scrollbar-track
@@ -302,4 +308,13 @@ small{
   //background: red !important;
   border-radius: 10px;
   background: #1e293b;
+}
+.player-list-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+.player-list-wrapper input{
+  font-size: 14px;
 }
