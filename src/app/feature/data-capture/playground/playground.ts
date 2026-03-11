@@ -12,6 +12,8 @@ import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
 import {Snackbar} from '../../../services/snackbar';
 import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
+import {POSITIONS} from '../constants/player';
+import {AddPlayer} from '../../../ui/add-player/add-player';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -25,7 +27,8 @@ interface DraftTerm {
     PlayerCard,
     DataTable,
     Alert,
-    YoutubePlayer
+    YoutubePlayer,
+    AddPlayer
   ],
   templateUrl: './playground.html',
   styleUrl: './playground.scss'
@@ -77,6 +80,8 @@ export class Playground {
   removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
   showSelectBoxes = signal<boolean>(false)
   public videoUrl = signal('')
+  defaultPlayer: Player =   { id: 'a1', name: 'P1', jersey_no: '1', status: 'ready', position: POSITIONS.find(p => p.key === 'GK')! }
+  isOpen = signal<boolean>(false);
 
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
@@ -272,5 +277,29 @@ export class Playground {
       }
     })
     this.showSelectBoxes.set(false)
+  }
+
+  addPlayer(player: Player, teamSide: TeamSide) {
+      this.MATCHDAY_CONFIG.update(state => {
+        return {
+          ...state,
+          [teamSide]: {
+            ...state[teamSide],
+            players: [...state[teamSide].players, player]
+          }
+        }
+      })
+    this.closePlayerModal()
+  }
+
+  showPlayerModal(teamSide: TeamSide) {
+    if (this.MATCHDAY_CONFIG()[teamSide].players.length === 11){
+      this.snackbarService.updateAlert({message: "Cannot exceed 11 players", cssClass: "warning", duration: 2000})
+      return
+    }
+    this.isOpen.set(true)
+  }
+  closePlayerModal() {
+    this.isOpen.set(false)
   }
 }

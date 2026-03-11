@@ -37,8 +37,11 @@
       <div class="home">
         <div class="side-details">
           <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
-          <button type="button"><span class="material-symbols-outlined person">person_add</span></button>
+          <button type="button" (click)="showPlayerModal('home')"><span class="material-symbols-outlined person">person_add</span></button>
         </div>
+        @if (isOpen()) {
+            <app-add-player [player]="defaultPlayer" [active]="false" (newPlayer)="addPlayer($event, 'home')" (closeModal)="closePlayerModal()"/>
+        }
         @for (player of filteredPlayersList().home.players; track player.id) {
           <div class="player-list-wrapper">
             @if (showSelectBoxes()) {
@@ -113,6 +116,10 @@
         <div class="trigger">
           <p>Quick Trigger Enabled</p>
           <p><span class="shortcut">Space</span> Commentary</p>
+        </div>
+        <div class="trigger">
+<!--          <p>Quick Trigger Enabled</p>-->
+          <p><span class="shortcut">Double Click</span> Edit Player</p>
         </div>
         <span class="eventsQty">{{ matchLogEntry().length}} Events Captured</span>
       </div>

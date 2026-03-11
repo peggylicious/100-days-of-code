@@ -2,14 +2,14 @@
   <div class="jersey_no">
     <input #jersey_no type="text" [value]="player().jersey_no">
     @if (!isEditing()) {
-      <div class="shield" (click)="editJersey($event, 'jersey')"></div>
+      <div class="shield" (dblclick)="editJersey($event, 'jersey')"></div>
     }
   </div>
   <div class="group-details">
     <div class="name-wrapper">
       <input #player_name type="text" class="name-input" [class.active-name-input]="isEditing()" [value]="player().name">
       @if (!isEditing()) {
-        <p class="shield name" (click)="editJersey($event, 'name')">{{ player().name }}</p>
+        <p class="shield name" (dblclick)="editJersey($event, 'name')">{{ player().name }}</p>
       }
     </div>
     <p class="position-status"><span>{{ player().position.key }}</span> <b> . </b><span>{{ player().status }}</span></p>

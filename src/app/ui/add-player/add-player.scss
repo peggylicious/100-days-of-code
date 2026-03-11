@@ -1,0 +1,222 @@
+:host{
+  width: 100%;
+  display: block;
+}
+.player{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  padding: 14.5px .75rem;
+  cursor: pointer;
+  width: 100%;
+}
+.active{
+  border-radius: .75rem;
+  background: #22C55E;
+}
+.active * {
+  color: #020617;
+}
+
+.jersey_no, .jersey_no input{
+  color: #94A3B8;
+  background: #1E293B;
+  border-radius: .5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+  text-align: center;
+}
+.active .jersey_no, .active .jersey_no input{
+  background: rgba(2, 6, 23, 0.2);
+  color: #020617;
+  font-weight: bold;
+}
+.group-details{
+  min-width: 100px;
+  text-align: left;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.group-details input{
+  //max-width: 80px;
+}
+.name-wrapper{
+  position: relative;
+
+}
+.name{
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+}
+
+.position-status{
+  color: #64748B;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: capitalize;
+  opacity: 0.7;
+}
+svg{
+  margin-left: auto;
+}
+.jersey_no input, .jersey_no .shield{
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: none;
+}
+
+//.name-input{
+//  position: absolute;
+//  left: 0;
+//  top: 0;
+//  z-index: -1;
+//}
+//.name-input.active-name-input{
+//  position: relative;
+//  z-index: 1;
+//}
+select{
+  width: 100%;
+}
+.submit{
+  padding: .75rem 1rem;
+  background: #22C55E;
+  color: #fff;
+  font-weight: bold;
+  border-radius: .5rem;
+  border: none;
+  width: 100%;
+}
+
+:host{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);    /* Adjust the '10px' to change blur intensity */
+  -webkit-backdrop-filter: blur(10px); /* Required for Safari support */
+  /* Optional: adds a slight border to help the "glass" look pop */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.25rem;
+}
+
+// New Modal
+
+.fb-modal-wrapper{
+  //background: #102215;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.fb-modal-container{
+  background: #0A0A0C;
+  border-radius: 1rem;
+  border: 1px solid #1E293B;
+  box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.4);
+  max-width: 500px;
+  min-width: 300px;
+  width: 100%;
+}
+.fb-modal-title{
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #1E293B;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fb-modal-body{
+  padding: 2rem;
+}
+.fb-modal-footer{
+  padding: 1.25rem 2rem;
+}
+.title-txt{
+  max-width: 200px;
+}
+.title-txt h1{
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+.title-txt p{
+  color: #94A3B8;
+  font-weight: 400;
+  font-size: 14px;
+}
+.close{
+  color: #64748B;
+}
+.section-title{
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: .5rem;
+}
+.inp-wrapper{
+  background: transparent;
+  //border: 1px solid #1E293B;
+  border-radius: 12px;
+  position: relative;
+  margin-bottom: 1rem;
+}
+.close{
+  border: none;
+  background: transparent;
+  margin-left: auto;
+  display: block;
+  color: #64748B;
+}
+.inp-wrapper select, .inp-wrapper input{
+  padding: 1rem 1rem 1rem 50px;
+  width: 100%;
+  position: relative;
+  //background: transparent;
+  color: #fff;
+  background: #0F172A;
+  border-radius: 12px;
+  border: 1px solid #1E293B;
+}
+.inp-wrapper select::placeholder, .inp-wrapper input::placeholder{
+  color: #475569;
+}
+.inp-icon{
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: #64748B;
+  font-size: 18px;
+}
+.add-btn{
+  background: #22C55E;
+  color: #000;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 12px;
+  width: 100%;
+  padding: 1rem 0;
+}

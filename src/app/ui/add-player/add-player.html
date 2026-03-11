@@ -1,0 +1,48 @@
+<div class="fb-modal-wrapper">
+  <div class="fb-modal-container">
+    <div class="fb-modal-title">
+      <div class="title-txt">
+        <h1>Add Player</h1>
+        <p>Register a new athlete to the active roster.</p>
+      </div>
+      <button type="button" (click)="close()" class="close"><span class="material-symbols-outlined close">close</span></button>
+    </div>
+    <div class="fb-modal-body">
+      <div class="section">
+        <div class="section-title">
+          Player Name
+        </div>
+        <div class="inp-wrapper">
+          <span class="material-symbols-outlined inp-icon">person</span>
+          <input #player_name [value]="player().name" type="text" placeholder="e.g. Mark Thompson">
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">
+          Field Position
+        </div>
+        <div class="inp-wrapper">
+          <span class="material-symbols-outlined inp-icon">label</span>
+          <select #position name="" id="" (change)="selectPosition($any($event).target.value)">
+            @for (pos of POSITIONS; track pos.id) {
+              <option [value]="pos.key">{{ pos.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">
+          Jersey No.
+        </div>
+        <div class="inp-wrapper">
+          <span class="material-symbols-outlined inp-icon">tag</span>
+          <input #jersey_no [value]="player().jersey_no" type="number" placeholder="e.g. 5">
+        </div>
+      </div>
+    </div>
+    <div class="fb-modal-footer">
+      <button type="button" class="add-btn" (click)="submit(jersey_no, player_name, position)"><span class="material-symbols-outlined check">person_add</span>Add Player to squad</button>
+<!--      <button type="button" class="add-btn"><span class="material-symbols-outlined check">person_add</span>Add Player to squad</button>-->
+    </div>
+  </div>
+</div>
