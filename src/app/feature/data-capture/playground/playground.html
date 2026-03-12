@@ -34,40 +34,48 @@
       <input type="text" placeholder="Find Player" (input)="query.set($any($event.target).value)">
     </div>
     <div class="player-list">
-      <div class="home">
-        <div class="side-details">
-          <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
-          <button type="button" (click)="showPlayerModal('home')"><span class="material-symbols-outlined person">person_add</span></button>
-        </div>
-        @if (isOpen()) {
+      @if (filteredPlayersList().home.players.length || filteredPlayersList().away.players.length) {
+        <div class="home">
+          <div class="side-details">
+            <h5 class="team-name">{{ filteredPlayersList().home.name }} (Home)</h5>
+            <button type="button" (click)="showPlayerModal('home')"><span class="material-symbols-outlined person">person_add</span></button>
+          </div>
+          @if (isOpen()) {
             <app-add-player [player]="defaultPlayer" [active]="false" (newPlayer)="addPlayer($event, 'home')" (closeModal)="closePlayerModal()"/>
-        }
-        @for (player of filteredPlayersList().home.players; track player.id) {
-          <div class="player-list-wrapper">
-            @if (showSelectBoxes()) {
-              <input type="checkbox" (change)="selectForDeletion(player.id, 'home')">
-            }
-            <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
+          }
+          @for (player of filteredPlayersList().home.players; track player.id) {
+            <div class="player-list-wrapper">
+              @if (showSelectBoxes()) {
+                <input type="checkbox" (change)="selectForDeletion(player.id, 'home')">
+              }
+              <app-player-card [player]="player" [active]="player.status === 'active'" (playerChange)="updatePlayer($event, player.id, 'home')" (click)="selectPlayer(player, 'home')"/>
+            </div>
+          }
+          @if (!filteredPlayersList().home.players.length && filteredPlayersList().away.players.length){
+            <small class="team-name">No home player found</small>
+          }
+        </div>
+        <div class="away">
+          <div class="side-details">
+            <h5 class="team-name">{{ filteredPlayersList().away.name }} (Away)</h5>
+            <button type="button" (click)="showPlayerModal('away')"><span class="material-symbols-outlined person">person_add</span></button>
           </div>
-        }
-        @if (filteredPlayersList().home.players.length === 0){
-          <small class="team-name">No home player found</small>
-        }
-      </div>
-      <div class="away">
-        <h5 class="team-name">{{ filteredPlayersList().away.name }} (Away)</h5>
-        @for (player of filteredPlayersList().away.players; track player.id) {
-          <div class="player-list-wrapper">
-            @if (showSelectBoxes()) {
-              <input type="checkbox" (change)="selectForDeletion(player.id, 'away')">
-            }
-            <app-player-card [player]="player" [active]="player.status === 'active'" (click)="selectPlayer(player, 'away')"/>
-          </div>
-        }
-        @if (filteredPlayersList().home.players.length === 0){
-          <small class="team-name">No away player found</small>
-        }
-      </div>
+          @for (player of filteredPlayersList().away.players; track player.id) {
+            <div class="player-list-wrapper">
+              @if (showSelectBoxes()) {
+                <input type="checkbox" (change)="selectForDeletion(player.id, 'away')">
+              }
+              <app-player-card [player]="player" [active]="player.status === 'active'" (click)="selectPlayer(player, 'away')"/>
+            </div>
+          }
+          @if (!filteredPlayersList().away.players.length && filteredPlayersList().home.players.length){
+            <small class="team-name">No away player found</small>
+          }
+        </div>
+      }
+      @if (!filteredPlayersList().away.players.length && !filteredPlayersList().home.players.length){
+        <small class="team-name">No player found</small>
+      }
     </div>
     <div class="lhs-bottom">
       @if (!showSelectBoxes()) {
