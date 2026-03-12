@@ -37,6 +37,7 @@ export class Playground {
   private snackbarService = inject(Snackbar)
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
   private CONFIG_TAG = 'MATCHDAY_CONFIG'
+  private EVENT_TAG = 'MATCHDAY_EVENT'
   private MATCHDAY_CONFIG = linkedSignal(() => {
     const storageData = localStorage.getItem(this.CONFIG_TAG);
     const savedEvents = JSON.parse(storageData ?? '{}') as MatchConfig
@@ -45,8 +46,18 @@ export class Playground {
   })
   public alerts = this.snackbarService.alerts
   public query = signal('')
-  private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer())
-  public matchLogEntry = signal<MatchEventLogEntry[]>([])
+  private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer()) //Gets active player data
+  private matchLogEntry = linkedSignal<MatchEventLogEntry[]>(() => {
+    const storageEvents = localStorage.getItem(this.EVENT_TAG);
+    const savedEvents = JSON.parse(storageEvents ?? '[]') as MatchEventLogEntry[]
+    const isEmpty = savedEvents.length === 0;
+    return isEmpty ? [] : JSON.parse(storageEvents ?? '[]') as MatchEventLogEntry[]
+  })
+  public eventsTable = computed(() => {
+    const logs = this.matchLogEntry()
+    localStorage.setItem(this.EVENT_TAG, JSON.stringify(logs));
+    return this.matchLogEntry()
+  })
   private draft = signal<DraftTerm>({
     isPlayerSelected: false,
     isEventSelected: false,
@@ -227,9 +238,23 @@ export class Playground {
             }
             return player
           })
-
         }
       }
+    })
+    this.updateLogs($event)
+  }
+
+  updateLogs(player: Player){
+    this.matchLogEntry.update((state) => {
+      return state.map(log => {
+        if(log.playerId === player.id){
+          return {
+            ...log,
+            playerName: player.name,
+          }
+        }
+        return log
+      })
     })
   }
 

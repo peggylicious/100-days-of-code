@@ -108,7 +108,7 @@
         @if (isShowTable()) {
 <!--          <div class="table-wrapper" [style.transform]="isShowTable() ? 'translateY(' + -260 + 'px)' : 'translateY(0)'">-->
           <div class="table-wrapper">
-            <app-data-table [playerTableEntry]="matchLogEntry()" (showSelectedCoordinate)="showSelectedCoordinate($event)" (showSelectedCoordinateAndSeek)="seek($event)"/>
+            <app-data-table [playerTableEntry]="eventsTable()" (showSelectedCoordinate)="showSelectedCoordinate($event)" (showSelectedCoordinateAndSeek)="seek($event)"/>
           </div>
         }
       </div>
@@ -121,7 +121,7 @@
 <!--          <p>Quick Trigger Enabled</p>-->
           <p><span class="shortcut">Double Click</span> Edit Player</p>
         </div>
-        <span class="eventsQty">{{ matchLogEntry().length}} Events Captured</span>
+        <span class="eventsQty">{{ eventsTable().length}} Events Captured</span>
       </div>
     </div>
   </div>
