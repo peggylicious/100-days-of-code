@@ -15,6 +15,7 @@ import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
 import {POSITIONS} from '../constants/player';
 import {AddPlayer} from '../../../ui/add-player/add-player';
 import {getOutcomeCommentary} from '../constants/events-commentary';
+import {ExportCsv} from '../../../services/export-csv';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -45,6 +46,7 @@ export class Playground {
     // this.closeModal();
   }
   private snackbarService = inject(Snackbar)
+  exportCsvService = inject(ExportCsv)
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
   private CONFIG_TAG = 'MATCHDAY_CONFIG'
   private EVENT_TAG = 'MATCHDAY_EVENT'
@@ -349,5 +351,9 @@ export class Playground {
   }
   closePlayerModal() {
     this.isOpen.set(false)
+  }
+
+  exportLocalData() {
+    this.exportCsvService.exportLocalStorageToCsv(this.EVENT_TAG, 'exportLocalData')
   }
 }
