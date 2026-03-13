@@ -17,6 +17,7 @@
   height: 100%;
   border: var(--pitch-border);
   position: relative;
+  cursor: pointer;
 }
 .pitch-box *{
   pointer-events: none;

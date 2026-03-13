@@ -1,4 +1,5 @@
 import {EventOutcome} from './player-events';
+import {MatchingZone} from './pitch';
 
 export interface Position{
   id: string;
@@ -24,10 +25,11 @@ export interface MatchEventLogEntry {
   eventTypeName: string;   // Cached name (e.g., "Shot")
   categoryType: 'attacking' | 'defending' | 'transitions' | 'set_pieces' | 'discipline';
   outcome: EventOutcome;   // The full outcome object (label, color, icon)
-  coordinates?: {          // Optional, only for events like Shots
-    x: number;
-    y: number;
-  };
+  // coordinates: {          // Optional, only for events like Shots
+  //   x: number;
+  //   y: number;
+  // };
+  coordinates: MatchingZone;
   offset: {
     x: number;
     y: number;

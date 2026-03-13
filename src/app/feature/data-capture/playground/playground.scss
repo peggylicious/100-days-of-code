@@ -187,6 +187,9 @@ small{
   justify-content: flex-start;
   gap: 1rem;
 }
+.tabs button{
+  cursor: pointer;
+}
 .trigger{
   display: flex;
   gap: 1rem;
