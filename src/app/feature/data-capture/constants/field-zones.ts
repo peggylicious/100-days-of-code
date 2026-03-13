@@ -423,9 +423,9 @@ export const  swapedCoords = FIELD_ZONES.map(zone => {
     ...zone,
     coordinates: {
       x1: 100 - x2,
-      y1: y1,
+      y1: 100 - y2,
       x2: 100 - x1,
-      y2: y2
+      y2: 100 - y1
     }
   }
 })

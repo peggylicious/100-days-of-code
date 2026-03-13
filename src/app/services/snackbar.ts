@@ -5,12 +5,12 @@ import {AlertProp} from '../feature/data-capture/interfaces/shared';
   providedIn: 'root',
 })
 export class Snackbar {
-  public alerts = signal<{id: string, alert: AlertProp}[]>([])
+  public alerts = signal<{id: string, alert: AlertProp, player?: string}[]>([])
 
-  updateAlert(alert: AlertProp){
+  updateAlert(alert: AlertProp, player?: string) {
     const id = crypto.randomUUID();
     this.alerts.update(state => {
-      return [...state, {id: id, alert}]
+      return [...state, {id: id, alert, player}]
     })
   }
 

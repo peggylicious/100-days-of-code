@@ -137,6 +137,6 @@
 </div>
 <div class="alerts-wrapper">
   @for (alert of alerts(); track alert.id) {
-    <app-alert [prop]="alert.alert" (closed)="removeAlert(alert.id)"/>
+    <app-alert [prop]="alert.alert" [player]="alert.player" (closed)="removeAlert(alert.id)"/>
   }
 </div>

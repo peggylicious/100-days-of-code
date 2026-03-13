@@ -1,9 +1,11 @@
-export type CssClass = "success" | "warning" | "info"
+export type CssClass = "success" | "warning" | "info" | "dark" | "light"
 
 export interface AlertProp {
   cssClass?: CssClass;
   duration?: number;
-  message: string
+  position?: 'top' | 'bottom'
+  message: string;
+  type?: 'commentary'
 }
 
 export enum YoutubePlayerState {

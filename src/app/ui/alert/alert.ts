@@ -11,9 +11,10 @@ import {AlertProp} from '../../feature/data-capture/interfaces/shared';
 })
 export class Alert {
   host = inject(ElementRef)
-  prop = input<AlertProp>({cssClass: 'success', duration: 70000, message: 'Close alert'});
+  prop = input<AlertProp>({cssClass: 'success', duration: 70000, message: 'Close alert', position: 'top'});
   close = signal<boolean>(false)
   closed = output()
+  player = input<string>()
   timerId: number = 0
   componentLength = signal(0)
 

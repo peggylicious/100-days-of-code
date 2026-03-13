@@ -65,6 +65,7 @@
 }
 .zone p{
   pointer-events: none;
+  font-size: 11px;
 }
 .penalty-sm{
   //width: calc((var(--actual-pitch-length-m) / var(--actual-penalty-length-sm)) * 100%);

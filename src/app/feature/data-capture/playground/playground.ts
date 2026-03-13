@@ -1,4 +1,4 @@
-import {Component, computed, inject, linkedSignal, signal} from '@angular/core';
+import {Component, computed, HostListener, inject, linkedSignal, signal} from '@angular/core';
 import {Pitch} from '../../../ui/pitch/pitch';
 import { PitchConfig} from '../interfaces/pitch';
 import {PlayerEvents} from '../../../ui/player-events/player-events';
@@ -14,6 +14,7 @@ import {Snackbar} from '../../../services/snackbar';
 import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
 import {POSITIONS} from '../constants/player';
 import {AddPlayer} from '../../../ui/add-player/add-player';
+import {getOutcomeCommentary} from '../constants/events-commentary';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -34,6 +35,15 @@ interface DraftTerm {
   styleUrl: './playground.scss'
 })
 export class Playground {
+
+  @HostListener('window:keydown.space', ['$event'])
+  handleKeyDown(event: Event) {
+    const kbEvt = event as KeyboardEvent;
+    console.log('Escape pressed!', event, kbEvt);
+    this.commentaryOn.set(!this.commentaryOn())
+    this.snackbarService.updateAlert({message: "Commentary turned " + (this.commentaryOn() ? 'ON' : 'OFF') + "!", cssClass: "info", duration: 1500})
+    // this.closeModal();
+  }
   private snackbarService = inject(Snackbar)
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
   private CONFIG_TAG = 'MATCHDAY_CONFIG'
@@ -93,16 +103,12 @@ export class Playground {
   public videoUrl = signal('')
   defaultPlayer: Player =   { id: 'a1', name: 'P1', jersey_no: '1', status: 'ready', position: POSITIONS.find(p => p.key === 'GK')! }
   isOpen = signal<boolean>(false);
-
+  commentaryOn = signal<boolean>(false)
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
         ...state,
-        coordinates: {
-          ...state.coordinates,
-          x: zone.zoneConfig.x,
-          y: zone.zoneConfig.y
-        },
+        coordinates: zone.zoneConfig,
         offset: zone.offsetConfig
       }
     })
@@ -147,7 +153,7 @@ export class Playground {
   updatePlayerEvent(data: { item: FootballItem; outcome: EventOutcome }) {
     // if (this.isPlayerPaused() || (!this.isPlayerPaused && !this.latestPlayTime()?.yt)){
     if (this.isPlayerPaused()){
-      this.snackbarService.updateAlert({message: "You will need to start match before logging player events!", cssClass: "warning", duration: 7000})
+      this.snackbarService.updateAlert({message: "You will need to start match before logging player events!", cssClass: "warning", duration: 2000})
       return;
     }
     if(!this.checkDraftSelection()){
@@ -169,6 +175,23 @@ export class Playground {
       return[...state, this.selectedPlayerData()  as MatchEventLogEntry];
     })
     this.draft.update(state => ({...state, isEventSelected: false, isCoordinateSelected: false}))
+    if (this.commentaryOn()){
+      this.snackbarService.updateAlert(
+        {
+          message: getOutcomeCommentary(
+            this.selectedPlayerData().playerName!,
+            this.selectedPlayerData().eventTypeId!,
+            this.selectedPlayerData().outcome?.id!,
+            this.selectedPlayerData().coordinates?.zone.name!
+          ),
+          duration: 1000,
+          position: 'bottom',
+          cssClass: 'light',
+          type: 'commentary',
+        },
+        this.selectedPlayerData().playerName
+      )
+    }
     this.selectedPlayerData.update(state => ({...{}, playerId: state.playerId, playerName: state.playerName}))
   }
 
