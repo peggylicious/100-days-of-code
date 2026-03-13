@@ -1,4 +1,4 @@
-export const outcomeCommentaryLibrary: Record<string, Record<string, string[]>> = {
+export const outcomeCommentaryLibrary: Record<string, Record<string, string[]>> = { //This config was done by AI
   // --- ATTACKING ---
   pass: {
     successful: [

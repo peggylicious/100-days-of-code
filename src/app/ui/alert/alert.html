@@ -4,7 +4,7 @@
          [style.top]="position() === 'top' ? (componentLength() + 10 )+ 'px' : 'initial'"
          [style.bottom]="position() === 'bottom' ? (componentLength() + 10 )+ 'px' : 'initial'"
          [style.right]="(componentLength() + 10 )+ 'px'">
-      <strong>{{cssClass()}}!</strong> {{ message() }}
+      <b>{{cssClass()}}!</b> {{ message() }}
       <span class="closebtn" (click)="closeManually()">&times;</span>
     </div>
   }

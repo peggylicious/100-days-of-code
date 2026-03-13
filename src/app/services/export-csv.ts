@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {MatchEventLogEntry} from '../feature/data-capture/interfaces/player';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,9 @@ export class ExportCsv {
     }
 
     try {
-      const jsonData = JSON.parse(data);
-      const csvString = this.generateCsvString(jsonData);
+      const jsonData: MatchEventLogEntry[] = JSON.parse(data);
+      const flattenedData = this.flattenedData(jsonData)
+      const csvString = this.generateCsvString(flattenedData);
       this.downloadCsv(csvString, filename);
     } catch (e) {
       console.error('Error parsing localStorage data. Is it valid JSON?', e);
@@ -59,5 +61,24 @@ export class ExportCsv {
     // Cleanup
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  }
+
+  flattenedData(data: MatchEventLogEntry[]){
+    return data.map(entry => {
+      return {
+        matchTime: entry.matchTime,
+        timestamp: entry.timestamp,
+        playerId: entry.playerId,
+        playerName: entry.playerName,
+        eventTypeId: entry.eventTypeId,
+        eventTypeName: entry.eventTypeName,
+        categoryType: entry.categoryType,
+        outcome: entry.outcome.id,
+        "x-coordinates": entry.coordinates.x,
+        "y-coordinates": entry.coordinates.y,
+        "x-offset": entry.offset.x,
+        "y-offset": entry.offset.y,
+      }
+    })
   }
 }
