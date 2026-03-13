@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, input, output, signal, viewChildren} from '@angular/core';
+import {Component, computed, ElementRef, inject, input, output, signal, viewChildren} from '@angular/core';
 import {AlertProp} from '../../feature/data-capture/interfaces/shared';
 
 
@@ -10,25 +10,33 @@ import {AlertProp} from '../../feature/data-capture/interfaces/shared';
   styleUrl: './alert.scss',
 })
 export class Alert {
-  host = inject(ElementRef)
-  prop = input<AlertProp>({cssClass: 'success', duration: 70000, message: 'Close alert', position: 'top'});
-  close = signal<boolean>(false)
-  closed = output()
-  player = input<string>()
-  timerId: number = 0
-  componentLength = signal(0)
+  public prop = input.required<AlertProp>();
+  public player = input<string>()
+  public close = signal<boolean>(false)
+  public closed = output()
+
+  public componentLength = signal(0)
+  public duration = computed(() => this.prop().duration ?? 2000)
+  public cssClass = computed(() => this.prop().cssClass ?? 'success')
+  public message = computed(() => this.prop().message ?? 'Close alert')
+  public position = computed(() => this.prop().position ?? 'top')
+  public type = computed(() => this.prop().type ?? undefined)
+
+  private host = inject(ElementRef)
+  private timerId: number = 0
+
 
   ngOnInit() {
     this.timerId = setTimeout(() => {
       this.close.set(true)
       this.closed.emit()
-    }, this.prop().duration)
+    }, this.duration())
 
     const parentLength = this.host.nativeElement.parentElement.children.length
     this.componentLength.update(state => state + (parentLength * 5))
   }
 
-  closeManually(){
+  public closeManually(){
     if(this.timerId){
       clearTimeout(this.timerId)
     }

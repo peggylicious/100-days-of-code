@@ -1,19 +1,17 @@
 @if (!close()) {
-  @let cssClass = prop().cssClass;
-  @let message = prop().message;
-  @if (!prop().type) {
-    <div class="alert" [class]="cssClass"
-         [style.top]="prop().position === 'top' || !prop().position ? (componentLength() + 10 )+ 'px' : 'initial'"
-         [style.bottom]="prop().position === 'bottom' ? (componentLength() + 10 )+ 'px' : 'initial'"
+  @if (!type()) {
+    <div class="alert" [class]="cssClass()"
+         [style.top]="position() === 'top' ? (componentLength() + 10 )+ 'px' : 'initial'"
+         [style.bottom]="position() === 'bottom' ? (componentLength() + 10 )+ 'px' : 'initial'"
          [style.right]="(componentLength() + 10 )+ 'px'">
-      <strong>{{cssClass}}!</strong> {{ message }}
+      <strong>{{cssClass()}}!</strong> {{ message() }}
       <span class="closebtn" (click)="closeManually()">&times;</span>
     </div>
   }
-  @if (prop().type == 'commentary') {
-    @let commentary = message.split('{{player}}');
-    <div class="alert" [class]="cssClass"
-         [style.bottom]="prop().position === 'bottom' ? (componentLength() + 10 )+ 'px' : 'initial'"
+  @if (type() == 'commentary') {
+    @let commentary = message().split('{{player}}');
+    <div class="alert" [class]="cssClass()"
+         [style.bottom]="position() === 'bottom' ? (componentLength() + 10 )+ 'px' : 'initial'"
          [style.right]="(componentLength() + 10 )+ 'px'">
       <span class="material-symbols-outlined check">check_circle</span> {{ commentary[0] }} <div class="styled">{{player()}}</div> {{commentary[1]}}
     </div>
