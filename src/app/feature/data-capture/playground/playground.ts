@@ -105,7 +105,17 @@ export class Playground {
   public videoUrl = signal('')
   defaultPlayer: Player =   { id: 'a1', name: 'P1', jersey_no: '1', status: 'ready', position: POSITIONS.find(p => p.key === 'GK')! }
   isOpen = signal<boolean>(false);
+  isShowHeatMap = signal<boolean>(false);
   commentaryOn = signal<boolean>(false)
+  playerHeatmap = computed(() => {
+    const x =  this.matchLogEntry().filter(entry => entry.playerId === this.selectedPlayerData().playerId).map(data => {
+      return {
+        x: data.coordinates.x,
+        y: data.coordinates.y
+      }
+    })
+    return  x
+  })
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {

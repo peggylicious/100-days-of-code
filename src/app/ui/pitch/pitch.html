@@ -1,5 +1,16 @@
 <div class="pitch-wrapper">
     <div class="pitch-box" (click)="getOffset($event)">
+      @if (heatMap()?.show){
+        <canvas
+          appHeatmap
+          [points]="heatMap()!.map"
+          [radius]="50"
+          [maxIntensity]="4"
+          width="1500"
+          height="1000">
+        </canvas>
+      }
+
       <div class="pointer" [style.top]="selectedCoordinate().y + 'px'" [style.left]="selectedCoordinate().x + 'px'"></div>
       @if (highlightedCoordinate()) {
         <div class="pointer highlight" [style.top]="highlightedCoordinate()?.y + 'px'" [style.left]="highlightedCoordinate()?.x + 'px'"></div>

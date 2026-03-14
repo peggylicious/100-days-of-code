@@ -94,7 +94,7 @@
 <!--              }-->
             </div>
       <div class="pitch-container">
-        <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="selectedTableItem()?.offset"/>
+        <app-pitch (onSelectPitchConfig)="selectPitchPosition($event)" [highlightedCoordinate]="selectedTableItem()?.offset" [heatMap]="{show: isShowHeatMap(), map:playerHeatmap()}"/>
       </div>
     </div>
 <!--    <div class="header">-->
@@ -106,6 +106,10 @@
           <button (click)="showTable()" [class.active]="!isShowTable()">Events</button>
           <button (click)="showTable()" [class.active]="isShowTable()">Events Log</button>
         </div>
+        <button class="heatmap-btn" (click)="isShowHeatMap.set(!isShowHeatMap())">
+          <span class="material-symbols-outlined">local_fire_department</span>
+          {{isShowHeatMap() ? "Hide Heatmap" : "Show Heatmap"}}
+        </button>
       </div>
       <div class="body">
         @if (!isShowTable()) {
@@ -140,3 +144,4 @@
     <app-alert [prop]="alert.alert" [player]="alert.player" (closed)="removeAlert(alert.id)"/>
   }
 </div>
+

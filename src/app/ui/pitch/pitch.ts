@@ -1,6 +1,8 @@
 import {Component, computed, input, Input, output, signal} from '@angular/core';
 import {FIELD_ZONES, swapedCoords} from '../../feature/data-capture/constants/field-zones';
 import {MatchingZone, PitchConfig, Zone} from '../../feature/data-capture/interfaces/pitch';
+import {Heatmap} from '../../directives/football-heatmap';
+// import {FootballHeatmap} from '../../directives/football-heatmap';
 const INITIAL_PITCH_CONFIG = {
   pixelX: 0,
   pixelY: 0,
@@ -9,7 +11,10 @@ const INITIAL_PITCH_CONFIG = {
 }
 @Component({
   selector: 'app-pitch',
-  imports: [],
+  imports: [
+    Heatmap,
+    // FootballHeatmap
+  ],
   templateUrl: './pitch.html',
   styleUrl: './pitch.scss'
 })
@@ -17,7 +22,7 @@ export class Pitch {
   private readonly SCALE = 100;
   zones: Zone[] = swapedCoords;
   private pitchConfig = signal(INITIAL_PITCH_CONFIG);
-
+  public heatMap = input<{show: boolean, map: {x: number; y: number}[]}>();
   onSelectPitchConfig = output<PitchConfig>();
 actualPitchLengthM = 105;
 actualPitchWidthM = 68; /* use 68 instead of 58 for realistic ratio */
@@ -54,7 +59,7 @@ pitchCenterCircleDiameter = this.pitchCenterCircleRadius * 2;
   clampedY = computed(() => Math.max(0, Math.min(100, this.normalizedYByScale())))
   selectedCoordinate = signal<{x: number, y: number}>({x: 0, y: 0})
   highlightedCoordinate = input<{ x: number; y: number }>();
-
+  // heatMap = input<{ x: number; y: number }[]>([]);
   getOffset($event: MouseEvent) {
     const clientDimensions = ($event.target as HTMLElement);
     this.pitchConfig.set({
