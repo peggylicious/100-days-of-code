@@ -244,12 +244,14 @@ small{
 }
 .search-bar{
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
 }
 .search-bar input{
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  flex: 1;
+  border-right: none;
 }
 .search-bar button{
   background: #1E293B;
@@ -258,6 +260,7 @@ small{
   border: 1px solid #1E293B;
   font-size: 12px;
   padding: 4px .5rem;
+
 }
 .export-csv{
   background: rgba(34, 197, 94, 0.1);
