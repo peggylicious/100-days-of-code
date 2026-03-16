@@ -4,6 +4,7 @@ export interface BaseEventItem {
   name: string;
   icon: string;
   hotkey: string;
+  color: string;
   allowedOutcomes: OutcomeId[]
 }
 

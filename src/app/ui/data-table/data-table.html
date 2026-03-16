@@ -19,12 +19,16 @@
     </tr>
     </thead>
     <tbody  (mouseleave)="showSelectedCoordinate.emit(null)">
-      @for (data of playerTableEntry(); track data.playerId) {
+      @for (data of playerTableEntry(); track $index) {
         <tr (mouseenter)="showSelectedCoordinate.emit(data)" (click)="showSelectedCoordinateAndSeek.emit(data.matchTime)">
           <td class="time">{{data.matchTime}}</td>
           <td class="player">{{ data.playerName }}</td>
-          <td class="events"><span class="event-tag attacking">{{ data.eventTypeName }}</span></td>
-          <td><span class="outcome-tag success">{{data.outcome.id }}</span></td>
+          <td class="events"><span class="m-event"><span class="event-tag attacking"><span class="material-symbols-outlined icon">{{ data.eventTypeId | matchEvent:'icon'}}</span>{{ data.eventTypeName }}</span></span></td>
+          <td><span class="outcome-tag success"
+                    [style.color]="data.outcome.color"
+                    [style.background]="data.outcome.color + '1a'"
+                    [style.border]="'1px solid ' + data.outcome.color"
+          >{{data.outcome.id }}</span></td>
           <td class="coords">[{{ data.coordinates.x }}, {{ data.coordinates.y }}]</td>
         </tr>
       }
