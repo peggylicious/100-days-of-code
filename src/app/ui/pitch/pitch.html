@@ -10,8 +10,9 @@
           height="1000">
         </canvas>
       }
-
-      <div class="pointer" [style.top]="selectedCoordinate().y + 'px'" [style.left]="selectedCoordinate().x + 'px'"></div>
+      @if (selectedCoordinate().y) {
+        <div class="pointer" [style.top]="selectedCoordinate().y + 'px'" [style.left]="selectedCoordinate().x + 'px'"></div>
+      }
       @if (highlightedCoordinate()) {
         <div class="pointer highlight" [style.top]="highlightedCoordinate()?.y + 'px'" [style.left]="highlightedCoordinate()?.x + 'px'"></div>
       }
