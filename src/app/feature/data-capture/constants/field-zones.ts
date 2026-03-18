@@ -1,3 +1,60 @@
+/**
+ * NB: IMPORTANT: !!!
+ *
+ * The **pitchWidth** is the shortest part of the pitch in px
+ * The **pitchLength** is the longest part of the pitch in px
+ * The normalized **normalizedX** coordinate is calculated by dividing the point x-pixel of the mouse by the pixel length of the pitch
+ * The normalized **normalizedY* coordinate is calculated by dividing the point y-pixel of the mouse by the pixel width of the pitch
+ * Additional subtraction on **normalizedY** is to make sure Y coordinate starts from bottom left instead of top left
+ * So, in summary This system is designed for pitch point of origin to start from bottom left
+ */
+
+export const INITIAL_PITCH_CONFIG = {
+  pixelX: 0,
+  pixelY: 0,
+  pitchWidth: 0,
+  pitchLength: 0
+}
+
+export const PITCH_SPECS= {
+  // SCALE
+  scale: 100,
+
+  dimensions: {
+    // actualPitchLengthM
+    length: 105,
+    // actualPitchWidthM
+    width: 68
+  },
+
+  penaltyAreaLarge: {
+    // actualPenaltyWidthLg
+    width: 40.3,
+    // actualPenaltyLengthLg
+    length: 16.5
+  },
+
+  penaltyAreaSmall: {
+    // actualPenaltyWidthsm
+    width: 18.3,
+    // actualPenaltyLengthsm
+    length: 5.5
+  },
+
+  centerCircle: {
+    // pitchCenterCircleRadius
+    radius: 9.15,
+    // pitchCenterCircleDiameter
+    diameter: 18.3
+  },
+
+  // Distance for the penalty spot
+  penaltySpotDist: 11,
+
+  // Radius for the 1m corner arc
+  cornerArcRadius: 1
+};
+
 export const FIELD_ZONES = [
 
   {

@@ -75,3 +75,5 @@ export const awayPlayers: Player[] = [
   { id: 'a10', name: 'Rodrygo', jersey_no: '11', status: 'ready', position: POSITIONS.find(p => p.key === 'ST')! },
   { id: 'a11', name: 'Vinícius Júnior', jersey_no: '7', status: 'ready', position: POSITIONS.find(p => p.key === 'ST')! }
 ];
+
+export const DEFAULT_PLAYER = { id: 'a1', name: 'P1', jersey_no: '1', status: 'ready', position: POSITIONS.find(p => p.key === 'GK')! }

@@ -12,7 +12,7 @@ import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
 import {Snackbar} from '../../../services/snackbar';
 import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
-import {POSITIONS} from '../constants/player';
+import {DEFAULT_PLAYER, POSITIONS} from '../constants/player';
 import {AddPlayer} from '../../../ui/add-player/add-player';
 import {getOutcomeCommentary} from '../constants/events-commentary';
 import {ExportCsv} from '../../../services/export-csv';
@@ -40,40 +40,64 @@ export class Playground {
   @HostListener('window:keydown.space', ['$event'])
   handleKeyDown(event: Event) {
     const kbEvt = event as KeyboardEvent;
-    console.log('Escape pressed!', event, kbEvt);
     this.commentaryOn.set(!this.commentaryOn())
     this.snackbarService.updateAlert({message: "Commentary turned " + (this.commentaryOn() ? 'ON' : 'OFF') + "!", cssClass: "info", duration: 1500})
-    // this.closeModal();
   }
+
   private snackbarService = inject(Snackbar)
-  exportCsvService = inject(ExportCsv)
-  public PLAYER_EVENTS = signal(footballEventsGoogleSet)
+  private exportCsvService = inject(ExportCsv)
   private CONFIG_TAG = 'MATCHDAY_CONFIG'
   private EVENT_TAG = 'MATCHDAY_EVENT'
+  defaultPlayer: Player =   DEFAULT_PLAYER
+  public alerts = this.snackbarService.alerts
+
+
+  public PLAYER_EVENTS = signal(footballEventsGoogleSet)
+  public query = signal('')
+  isOpen = signal<boolean>(false);
+  isShowHeatMap = signal<boolean>(false);
+  commentaryOn = signal<boolean>(false)
+  public isShowTable = signal<boolean>(false)
+  isPlayerPaused = signal<boolean>(true)
+  showSelectBoxes = signal<boolean>(false)
+  private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer()) //Gets active player data
+  private draft = signal<DraftTerm>({
+    isPlayerSelected: false,
+    isEventSelected: false,
+    isCoordinateSelected: false,
+  })
+  highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
+  selectedTableItem = signal<MatchEventLogEntry | null>(null)
+  latestPlayTime = signal<{yt: number, system: Date} | null>(null)
+  seekTime = signal<number>(0)
+  removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
+  public videoUrl = signal('')
   private MATCHDAY_CONFIG = linkedSignal(() => {
     const storageData = localStorage.getItem(this.CONFIG_TAG);
     const savedEvents = JSON.parse(storageData ?? '{}') as MatchConfig
     const isEmpty = Object.keys(savedEvents).length === 0;
     return isEmpty ? matchDayConfig : JSON.parse(storageData ?? '{}') as MatchConfig ?? matchDayConfig
   })
-  public alerts = this.snackbarService.alerts
-  public query = signal('')
-  private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer()) //Gets active player data
   private matchLogEntry = linkedSignal<MatchEventLogEntry[]>(() => {
     const storageEvents = localStorage.getItem(this.EVENT_TAG);
     const savedEvents = JSON.parse(storageEvents ?? '[]') as MatchEventLogEntry[]
     const isEmpty = savedEvents.length === 0;
     return isEmpty ? [] : JSON.parse(storageEvents ?? '[]') as MatchEventLogEntry[]
   })
+
   public eventsTable = computed(() => {
     const logs = this.matchLogEntry()
     localStorage.setItem(this.EVENT_TAG, JSON.stringify(logs));
     return this.matchLogEntry()
   })
-  private draft = signal<DraftTerm>({
-    isPlayerSelected: false,
-    isEventSelected: false,
-    isCoordinateSelected: false,
+  playerHeatmap = computed(() => {
+    const x =  this.matchLogEntry().filter(entry => entry.playerId === this.selectedPlayerData().playerId).map(data => {
+      return {
+        x: data.coordinates.x,
+        y: data.coordinates.y
+      }
+    })
+    return  x
   })
   filteredPlayersList = computed(()=> {
     const searchTerm = this.query().toLowerCase();
@@ -94,28 +118,7 @@ export class Playground {
       }
     }
   })
-  public isShowTable = signal<boolean>(false)
-  highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
-  selectedTableItem = signal<MatchEventLogEntry | null>(null)
-  latestPlayTime = signal<{yt: number, system: Date} | null>(null)
-  isPlayerPaused = signal<boolean>(true)
-  seekTime = signal<number>(0)
-  removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
-  showSelectBoxes = signal<boolean>(false)
-  public videoUrl = signal('')
-  defaultPlayer: Player =   { id: 'a1', name: 'P1', jersey_no: '1', status: 'ready', position: POSITIONS.find(p => p.key === 'GK')! }
-  isOpen = signal<boolean>(false);
-  isShowHeatMap = signal<boolean>(false);
-  commentaryOn = signal<boolean>(false)
-  playerHeatmap = computed(() => {
-    const x =  this.matchLogEntry().filter(entry => entry.playerId === this.selectedPlayerData().playerId).map(data => {
-      return {
-        x: data.coordinates.x,
-        y: data.coordinates.y
-      }
-    })
-    return  x
-  })
+
   selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
