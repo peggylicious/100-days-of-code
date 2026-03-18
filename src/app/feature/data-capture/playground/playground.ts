@@ -12,10 +12,11 @@ import {EventOutcome, FootballItem} from '../interfaces/player-events';
 import {Alert} from '../../../ui/alert/alert';
 import {Snackbar} from '../../../services/snackbar';
 import {YoutubePlayer} from '../../../ui/youtube-player/youtube-player';
-import {DEFAULT_PLAYER, POSITIONS} from '../constants/player';
+import {DEFAULT_PLAYER} from '../constants/player';
 import {AddPlayer} from '../../../ui/add-player/add-player';
 import {getOutcomeCommentary} from '../constants/events-commentary';
 import {ExportCsv} from '../../../services/export-csv';
+import {ViewState} from '../interfaces/shared';
 interface DraftTerm {
   isPlayerSelected: boolean;
   isEventSelected: boolean;
@@ -40,38 +41,41 @@ export class Playground {
   @HostListener('window:keydown.space', ['$event'])
   handleKeyDown(event: Event) {
     const kbEvt = event as KeyboardEvent;
-    this.commentaryOn.set(!this.commentaryOn())
-    this.snackbarService.updateAlert({message: "Commentary turned " + (this.commentaryOn() ? 'ON' : 'OFF') + "!", cssClass: "info", duration: 1500})
+    this.updateViewSettings({commentaryOn: !this.view().commentaryOn})
+    this.snackbarService.updateAlert({message: "Commentary turned " + (this.view().commentaryOn ? 'ON' : 'OFF') + "!", cssClass: "info", duration: 1500})
   }
 
   private snackbarService = inject(Snackbar)
   private exportCsvService = inject(ExportCsv)
+
   private CONFIG_TAG = 'MATCHDAY_CONFIG'
   private EVENT_TAG = 'MATCHDAY_EVENT'
-  defaultPlayer: Player =   DEFAULT_PLAYER
+  public defaultPlayer: Player =   DEFAULT_PLAYER
   public alerts = this.snackbarService.alerts
-
 
   public PLAYER_EVENTS = signal(footballEventsGoogleSet)
   public query = signal('')
-  isOpen = signal<boolean>(false);
-  isShowHeatMap = signal<boolean>(false);
-  commentaryOn = signal<boolean>(false)
-  public isShowTable = signal<boolean>(false)
-  isPlayerPaused = signal<boolean>(true)
-  showSelectBoxes = signal<boolean>(false)
+  public videoUrl = signal('')
+  public seekTime = signal<number>(0)
+  public selectedTableItem = signal<MatchEventLogEntry | null>(null)
+
+  private view = signal<ViewState>({
+    isOpen:  false,
+    isShowHeatMap: false,
+    commentaryOn: false,
+    isShowTable: false,
+    showSelectBoxes: false,
+    isPlayerPaused: true
+  })
   private selectedPlayerData = signal<Partial<MatchEventLogEntry>>(this.getSavedSelectedPlayer()) //Gets active player data
   private draft = signal<DraftTerm>({
     isPlayerSelected: false,
     isEventSelected: false,
     isCoordinateSelected: false,
   })
-  highlightedCoordinate = signal<{ x: number, y: number } | undefined>(undefined);
-  selectedTableItem = signal<MatchEventLogEntry | null>(null)
-  latestPlayTime = signal<{yt: number, system: Date} | null>(null)
-  seekTime = signal<number>(0)
-  removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
-  public videoUrl = signal('')
+  private latestPlayTime = signal<{yt: number, system: Date} | null>(null)
+  private removePlayerList = signal<{ home: string[], away: string[]}>({home: [], away: []})
+
   private MATCHDAY_CONFIG = linkedSignal(() => {
     const storageData = localStorage.getItem(this.CONFIG_TAG);
     const savedEvents = JSON.parse(storageData ?? '{}') as MatchConfig
@@ -90,7 +94,7 @@ export class Playground {
     localStorage.setItem(this.EVENT_TAG, JSON.stringify(logs));
     return this.matchLogEntry()
   })
-  playerHeatmap = computed(() => {
+  public playerHeatmap = computed(() => {
     const x =  this.matchLogEntry().filter(entry => entry.playerId === this.selectedPlayerData().playerId).map(data => {
       return {
         x: data.coordinates.x,
@@ -99,7 +103,7 @@ export class Playground {
     })
     return  x
   })
-  filteredPlayersList = computed(()=> {
+  public filteredPlayersList = computed(()=> {
     const searchTerm = this.query().toLowerCase();
     const state = this.MATCHDAY_CONFIG();
     if(!searchTerm)  {
@@ -118,8 +122,14 @@ export class Playground {
       }
     }
   })
+  public isShowHeatMap = computed(() => this.view().isShowHeatMap)
+  public showSelectBoxes = computed(() => this.view().showSelectBoxes)
+  public isShowTable = computed(() => this.view().isShowTable)
+  public isOpen = computed(() => this.view().isOpen)
 
-  selectPitchPosition(zone: PitchConfig) {
+
+
+  public selectPitchPosition(zone: PitchConfig) {
     this.selectedPlayerData.update(state => {
       return {
         ...state,
@@ -132,7 +142,7 @@ export class Playground {
     }
   }
 
-  selectPlayer(selectedPlayer: Player, teamSide: TeamSide) {
+  public selectPlayer(selectedPlayer: Player, teamSide: TeamSide) {
     this.MATCHDAY_CONFIG.update(state => {
       return {
         ...state,
@@ -152,22 +162,9 @@ export class Playground {
     }
   }
 
-  updateSelectedPlayerStatus(selectedPlayer: Player, team: Team, isTargetTeam: boolean){
-    const updatedPlayersList =  team.players.map((player) => {
-      return {
-        ...player,
-        status: isTargetTeam && player.id === selectedPlayer.id ? 'active' : 'ready',
-      }
-    })
-    return {
-      ...team,
-      players: updatedPlayersList
-    }
-  }
-
-  updatePlayerEvent(data: { item: FootballItem; outcome: EventOutcome }) {
+  public updatePlayerEvent(data: { item: FootballItem; outcome: EventOutcome }) {
     // if (this.isPlayerPaused() || (!this.isPlayerPaused && !this.latestPlayTime()?.yt)){
-    if (this.isPlayerPaused()){
+    if (this.view().isPlayerPaused){
       this.snackbarService.updateAlert({message: "You will need to start match before logging player events!", cssClass: "warning", duration: 2000})
       return;
     }
@@ -190,7 +187,7 @@ export class Playground {
       return[...state, this.selectedPlayerData()  as MatchEventLogEntry];
     })
     this.draft.update(state => ({...state, isEventSelected: false, isCoordinateSelected: false}))
-    if (this.commentaryOn()){
+    if (this.view().commentaryOn){
       this.snackbarService.updateAlert(
         {
           message: getOutcomeCommentary(
@@ -210,58 +207,38 @@ export class Playground {
     this.selectedPlayerData.update(state => ({...{}, playerId: state.playerId, playerName: state.playerName}))
   }
 
-  private updateDraft(term: Partial<DraftTerm>) {
-    this.draft.update(state => ({...state, ...term}))
-  }
-  private checkDraftSelection(){
-    if(!this.draft().isCoordinateSelected){
-      this.snackbarService.updateAlert({message: "No coordinate selected", cssClass: "warning", duration: 2000})
-      return false
-    }
-    if(!this.draft().isPlayerSelected && !this.selectedPlayerData().playerId){
-      this.snackbarService.updateAlert({message: "No player selected", cssClass: "info", duration: 2000})
-      return false
-    }
-    return true;
-  }
-
-  removeAlert(id: string){
+  public removeAlert(id: string){
     this.snackbarService.removeAlert(id)
   }
 
-  showTable() {
-    this.isShowTable.set(!this.isShowTable());
-  }
-  showSelectedCoordinate(event: MatchEventLogEntry | null){
-    this.selectedTableItem.set(event)
-  }
-  seek(time: number){
-      this.seekTime.set(time)
+  public showTable() {
+    this.updateViewSettings({isShowTable: !this.view().isShowTable})
+    // this.isShowTable.set(!this.isShowTable());
   }
 
-  logSelectedTime($event: {yt: number, system: Date}) {
-    console.log("log ", $event)
+  public showSelectedCoordinate(event: MatchEventLogEntry | null){
+    this.selectedTableItem.set(event)
+  }
+
+  public seek(time: number){
+    this.seekTime.set(time)
+  }
+
+  public logSelectedTime($event: {yt: number, system: Date}) {
     const {yt, system} = $event
     this.latestPlayTime.set({yt, system})
   }
 
-  getPlayerTimeAtAction(){
-    const msElapsed = Date.now() - (this.latestPlayTime()?.system.getTime() ?? 0);
-    const secondsElapsed = msElapsed / 1000;
-    console.log(this.latestPlayTime())
-    return  Math.floor((this.latestPlayTime()?.yt ?? 0) + secondsElapsed);
-  }
-
-  stopPlay(event: boolean) {
-    console.log(event)
-    this.isPlayerPaused.set(event)
+  public stopPlay(event: boolean) {
+    this.updateViewSettings({isPlayerPaused: event})
+    // this.isPlayerPaused.set(event)
   }
 
   public setVideoUrl(val: HTMLInputElement) {
     this.videoUrl.set(val.value)
   }
 
-  updatePlayer($event: Player, id: string, side: TeamSide) {
+  public updatePlayer($event: Player, id: string, side: TeamSide) {
     this.MATCHDAY_CONFIG.update(state => {
       return {
         ...state,
@@ -282,7 +259,108 @@ export class Playground {
     this.updateLogs($event)
   }
 
-  updateLogs(player: Player){
+  public selectForDeletion(id: string, side: TeamSide) {
+    if (side === 'home'){
+      this.removePlayerList.update(state => ({...state, home: [...state.home, id]}))
+    }
+    if (side === 'away'){
+      this.removePlayerList.update(state => ({...state, away: [...state.away, id]}))
+    }
+  }
+
+  public removePlayers() {
+    this.MATCHDAY_CONFIG.update(state => {
+      return {
+        ...state,
+        home: {
+          ...state.home,
+          players: state.home.players.filter(player => !this.removePlayerList().home.includes(player.id))
+        },
+        away: {
+          ...state.away,
+          players: state.away.players.filter(player => !this.removePlayerList().away.includes(player.id))
+        }
+      }
+    })
+    this.updateViewSettings({showSelectBoxes: false})
+    // this.showSelectBoxes.set(false)
+  }
+
+  public addPlayer(player: Player, teamSide: TeamSide) {
+    this.MATCHDAY_CONFIG.update(state => {
+      return {
+        ...state,
+        [teamSide]: {
+          ...state[teamSide],
+          players: [...state[teamSide].players, player]
+        }
+      }
+    })
+    this.closePlayerModal()
+  }
+
+  public showPlayerModal(teamSide: TeamSide) {
+    if (this.MATCHDAY_CONFIG()[teamSide].players.length === 11){
+      this.snackbarService.updateAlert({message: "Cannot exceed 11 players", cssClass: "warning", duration: 2000})
+      return
+    }
+    // this.isOpen.set(true)
+    this.updateViewSettings({isOpen: true})
+  }
+
+  public closePlayerModal() {
+    // this.isOpen.set(false)
+    this.updateViewSettings({isOpen: false})
+  }
+
+  public exportLocalData() {
+    this.exportCsvService.exportLocalStorageToCsv(this.EVENT_TAG, 'exportLocalData')
+  }
+
+  public toggleHeatMap(val: boolean){
+    this.view.update(state => ({...state, ...{isShowHeatMap: val}}))
+  }
+
+  public toggleSelectBoxes(val: boolean){
+    this.view.update(state => ({...state, ...{showSelectBoxes: val}}))
+  }
+
+  private updateDraft(term: Partial<DraftTerm>) {
+    this.draft.update(state => ({...state, ...term}))
+  }
+
+  private checkDraftSelection(){
+    if(!this.draft().isCoordinateSelected){
+      this.snackbarService.updateAlert({message: "No coordinate selected", cssClass: "warning", duration: 2000})
+      return false
+    }
+    if(!this.draft().isPlayerSelected && !this.selectedPlayerData().playerId){
+      this.snackbarService.updateAlert({message: "No player selected", cssClass: "info", duration: 2000})
+      return false
+    }
+    return true;
+  }
+
+  private updateSelectedPlayerStatus(selectedPlayer: Player, team: Team, isTargetTeam: boolean){
+    const updatedPlayersList =  team.players.map((player) => {
+      return {
+        ...player,
+        status: isTargetTeam && player.id === selectedPlayer.id ? 'active' : 'ready',
+      }
+    })
+    return {
+      ...team,
+      players: updatedPlayersList
+    }
+  }
+
+  private getPlayerTimeAtAction(){
+    const msElapsed = Date.now() - (this.latestPlayTime()?.system.getTime() ?? 0);
+    const secondsElapsed = msElapsed / 1000;
+    return  Math.floor((this.latestPlayTime()?.yt ?? 0) + secondsElapsed);
+  }
+
+  private updateLogs(player: Player){
     this.matchLogEntry.update((state) => {
       return state.map(log => {
         if(log.playerId === player.id){
@@ -296,7 +374,7 @@ export class Playground {
     })
   }
 
-  getSavedSelectedPlayer(){
+  private getSavedSelectedPlayer(){
     const storageData = localStorage.getItem(this.CONFIG_TAG);
     const savedConfig = JSON.parse(storageData ?? '{}') as MatchConfig
     const grpdPlayers: Player[] = []
@@ -316,57 +394,7 @@ export class Playground {
     return {}
   }
 
-  selectForDeletion(id: string, side: TeamSide) {
-    if (side === 'home'){
-      this.removePlayerList.update(state => ({...state, home: [...state.home, id]}))
-    }
-    if (side === 'away'){
-      this.removePlayerList.update(state => ({...state, away: [...state.away, id]}))
-    }
-  }
-
-  removePlayers() {
-    this.MATCHDAY_CONFIG.update(state => {
-      return {
-        ...state,
-        home: {
-          ...state.home,
-          players: state.home.players.filter(player => !this.removePlayerList().home.includes(player.id))
-        },
-        away: {
-          ...state.away,
-          players: state.away.players.filter(player => !this.removePlayerList().away.includes(player.id))
-        }
-      }
-    })
-    this.showSelectBoxes.set(false)
-  }
-
-  addPlayer(player: Player, teamSide: TeamSide) {
-      this.MATCHDAY_CONFIG.update(state => {
-        return {
-          ...state,
-          [teamSide]: {
-            ...state[teamSide],
-            players: [...state[teamSide].players, player]
-          }
-        }
-      })
-    this.closePlayerModal()
-  }
-
-  showPlayerModal(teamSide: TeamSide) {
-    if (this.MATCHDAY_CONFIG()[teamSide].players.length === 11){
-      this.snackbarService.updateAlert({message: "Cannot exceed 11 players", cssClass: "warning", duration: 2000})
-      return
-    }
-    this.isOpen.set(true)
-  }
-  closePlayerModal() {
-    this.isOpen.set(false)
-  }
-
-  exportLocalData() {
-    this.exportCsvService.exportLocalStorageToCsv(this.EVENT_TAG, 'exportLocalData')
+  private updateViewSettings(patch: Partial<ViewState>){
+    this.view.update(state => ({...state, ...patch}))
   }
 }

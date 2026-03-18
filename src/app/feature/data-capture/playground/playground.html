@@ -79,9 +79,9 @@
     </div>
     <div class="lhs-bottom">
       @if (!showSelectBoxes()) {
-        <button type="button" (click)="showSelectBoxes.set(true)"><span class="material-symbols-outlined check">check_box</span></button>
+        <button type="button" (click)="toggleSelectBoxes(true)"><span class="material-symbols-outlined check">check_box</span></button>
       } @else {
-        <button type="button" (click)="showSelectBoxes.set(false)"><span class="material-symbols-outlined check">cancel_presentation</span></button>
+        <button type="button" (click)="toggleSelectBoxes(false)"><span class="material-symbols-outlined check">cancel_presentation</span></button>
         <button type="button" (click)="removePlayers()"><span class="material-symbols-outlined delete">delete</span></button>
       }
     </div>
@@ -106,7 +106,7 @@
           <button (click)="showTable()" [class.active]="!isShowTable()">Events</button>
           <button (click)="showTable()" [class.active]="isShowTable()">Events Log</button>
         </div>
-        <button class="heatmap-btn" (click)="isShowHeatMap.set(!isShowHeatMap())">
+        <button class="heatmap-btn" (click)="toggleHeatMap(!isShowHeatMap())">
           <span class="material-symbols-outlined">local_fire_department</span>
           {{isShowHeatMap() ? "Hide Heatmap" : "Show Heatmap"}}
         </button>

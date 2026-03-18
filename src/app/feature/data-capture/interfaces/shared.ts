@@ -16,3 +16,11 @@ export enum YoutubePlayerState {
   BUFFERING = 3,
   CUED = 5
 }
+export interface ViewState {
+  isOpen: boolean;
+  isShowHeatMap: boolean;
+  commentaryOn: boolean;
+  isShowTable: boolean;
+  showSelectBoxes: boolean;
+  isPlayerPaused: boolean;
+}
