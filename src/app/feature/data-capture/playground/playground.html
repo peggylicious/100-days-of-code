@@ -106,7 +106,7 @@
           <button (click)="showTable()" [class.active]="!isShowTable()">Events</button>
           <button (click)="showTable()" [class.active]="isShowTable()">Events Log</button>
         </div>
-        <button class="heatmap-btn" (click)="toggleHeatMap(!isShowHeatMap())">
+        <button class="heatmap-btn" (click)="toggleHeatMap(!isShowHeatMap())" title="View heat map for a selected player, whose data exists on table">
           <span class="material-symbols-outlined">local_fire_department</span>
           {{isShowHeatMap() ? "Hide Heatmap" : "Show Heatmap"}}
         </button>
