@@ -314,7 +314,7 @@ export class Playground {
   }
 
   public exportLocalData() {
-    this.exportCsvService.exportLocalStorageToCsv(this.EVENT_TAG, 'exportLocalData')
+    this.exportCsvService.exportLocalStorageToCsv(this.EVENT_TAG, 'match-captured-data')
   }
 
   public toggleHeatMap(val: boolean){
